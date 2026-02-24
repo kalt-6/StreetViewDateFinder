@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Pano Date Extractor | Find the Exact Time of Street View Images</title>
+    <meta name="description" content="A free tool to extract the exact capture date and time (down to the second) from any Google Street View panorama URL using binary search technology.">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="header">
+            <img src="logo.png" alt="Pano Date Extractor Logo" class="logo">
+            <h1>Pano Date Extractor</h1>
+        </div>
+        
+        <p class="description">Paste a full Google Maps Street View URL or 22-character ID to reveal the exact capture timestamp.</p>
+        
+        <div class="disclaimer-box">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="info-icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <div>
+                <strong>Note:</strong> Finding the exact date for panoramas taken before 2025 can be finicky. If the tool hits a wall, try moving one step down the street on Google Maps and pasting the new link. You can keep moving and retrying until it works!
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="Paste URL or ID here..." spellcheck="false">
+        </div>
+        
+        <button id="runBtn">Extract Exact Date</button>
+        
+        <div id="logs" class="card logs-card"></div>
+        <div id="result" class="card result-card"></div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

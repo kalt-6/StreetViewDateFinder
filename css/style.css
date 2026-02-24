@@ -1,0 +1,223 @@
+:root {
+    /* Modern Dark Mode Palette */
+    --bg-app: #0a0a0a;
+    --bg-card: #16161a;
+    --bg-input: #24242b;
+    
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0b0;
+    
+    --accent-primary: #7f5af0; 
+    --accent-secondary: #2cb67d; 
+    --accent-error: #e53e3e; 
+    --accent-warning-bg: #2c2202;
+    --accent-warning-border: #b79c34;
+    
+    --glow-shadow: 0 0 20px rgba(127, 90, 240, 0.3);
+}
+
+body { 
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem; 
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.main-container { 
+    background: var(--bg-card);
+    padding: 2.5rem; 
+    border-radius: 16px; 
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+    max-width: 550px; 
+    width: 100%; 
+    text-align: center;
+}
+
+/* Header & Logo */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+}
+
+h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, #fff, #a0a0b0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.description {
+    color: var(--text-secondary); 
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+/* NEW: Disclaimer Box */
+.disclaimer-box {
+    background-color: rgba(127, 90, 240, 0.1);
+    border: 1px solid rgba(127, 90, 240, 0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    text-align: left;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.info-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    flex-shrink: 0;
+    color: var(--accent-primary);
+    margin-top: 2px;
+}
+
+.disclaimer-box strong {
+    color: var(--text-primary);
+}
+
+/* Inputs & Buttons */
+.input-group {
+    margin-bottom: 1.2rem;
+}
+
+input[type="text"] { 
+    width: 100%; 
+    padding: 14px 16px; 
+    background-color: var(--bg-input);
+    border: 1px solid transparent; 
+    border-radius: 8px; 
+    box-sizing: border-box; 
+    font-size: 1rem; 
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+input[type="text"]:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(127, 90, 240, 0.2);
+}
+
+button { 
+    width: 100%; 
+    padding: 14px; 
+    background: linear-gradient(135deg, var(--accent-primary), #5835c4); 
+    color: white; 
+    border: none; 
+    border-radius: 8px; 
+    font-size: 1.05rem; 
+    cursor: pointer; 
+    font-weight: 600; 
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(127, 90, 240, 0.3);
+}
+
+button:hover { 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(127, 90, 240, 0.4);
+}
+
+button:disabled { 
+    background: var(--bg-input); 
+    color: var(--text-secondary);
+    cursor: not-allowed; 
+    transform: none;
+    box-shadow: none;
+}
+
+/* Cards (Logs & Results) */
+.card {
+    margin-top: 1.5rem; 
+    padding: 1.2rem; 
+    border-radius: 8px;
+    text-align: left;
+    display: none;
+}
+
+.logs-card {
+    background-color: #0f0f12; 
+    color: #2cb67d; 
+    font-family: 'Fira Code', monospace; 
+    font-size: 0.8rem; 
+    height: 200px; 
+    overflow-y: auto; 
+    white-space: pre-wrap;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.result-card {
+    background-color: rgba(44, 182, 125, 0.1);
+    border: 1px solid var(--accent-secondary);
+}
+
+.result-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+}
+
+.success-time { 
+    color: var(--text-primary); 
+    font-weight: 700; 
+    font-size: 1.3rem; 
+    display: block; 
+}
+
+/* States */
+.error { 
+    background-color: rgba(229, 62, 62, 0.1) !important;
+    border: 1px solid var(--accent-error) !important;
+    color: var(--accent-error); 
+    text-align: center; 
+    font-weight: 600;
+}
+
+.warning-box { 
+    background-color: var(--accent-warning-bg);
+    border: 1px solid var(--accent-warning-border);
+    padding: 1rem; 
+    border-radius: 8px; 
+    text-align: center; 
+    color: var(--text-primary); 
+}
+
+.warning-title { 
+    color: #ffd700; 
+    font-weight: bold; 
+    margin-bottom: 12px; 
+    font-size: 1.1rem; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Custom Scrollbar for logs */
+#logs::-webkit-scrollbar { width: 8px; }
+#logs::-webkit-scrollbar-track { background: #0f0f12; }
+#logs::-webkit-scrollbar-thumb { background: #24242b; border-radius: 4px; }

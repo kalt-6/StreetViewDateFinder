@@ -199,8 +199,8 @@ async function extractDate() {
                     <div class="result-label">Location Local Time:</div>
                     <span class="success-time" style="color: var(--accent-secondary);">${localPanoTime}</span>
                     
-                    <div class="result-label" style="margin-top: 15px;">Your Local Time:</div>
-                    <span class="success-time" style="font-size: 1.1rem; color: var(--text-secondary);">${yourLocalTime}</span>
+                    <div class="result-label" style="margin-top: 8px;">Your Local Time:</div>
+                    <span class="success-time" style="font-size: 1rem; color: var(--text-secondary);">${yourLocalTime}</span>
                 </div>
             `;
         }
@@ -214,6 +214,7 @@ async function extractDate() {
 
 // Attach event listener
 runBtn.addEventListener('click', extractDate);
+
 
 
 

@@ -156,12 +156,12 @@ button:disabled {
     border: 2px solid var(--accent-secondary); 
     padding: 1.2rem 1rem;
     border-radius: 8px;
-    
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+    margin-top: 1.5rem;
 }
 
 .card {
@@ -211,12 +211,13 @@ button:disabled {
 }
 
 .warning-box { 
-    background-color: rgba(229, 62, 62, 0.1);
+    background-color: rgba(229, 62, 62, 0.1); 
     border: 1px solid var(--accent-error);
     padding: 1rem; 
     border-radius: 8px; 
     text-align: center; 
     color: var(--text-primary); 
+    margin-top: 1.5rem;
 }
 
 .warning-title { 
@@ -235,5 +236,6 @@ button:disabled {
 #logs::-webkit-scrollbar-track { background: #0f0f12; }
 
 #logs::-webkit-scrollbar-thumb { background: #24242b; border-radius: 4px; }
+
 
 

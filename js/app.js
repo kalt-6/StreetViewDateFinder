@@ -21,9 +21,6 @@ function logInfo(msg) {
 
 function showError(msg) {
     logInfo(`ERROR: ${msg}`);
-    resultDiv.style.display = 'block';
-    resultDiv.className = 'error';
-    resultDiv.innerText = msg;
 }
 
 async function extractDate() {
@@ -217,3 +214,4 @@ async function extractDate() {
 
 // Attach event listener
 runBtn.addEventListener('click', extractDate);
+

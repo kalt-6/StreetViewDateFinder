@@ -33,7 +33,14 @@ async function extractDate() {
     const inputVal = decodeURIComponent(urlInput.value.trim());
     let panoId = null;
 
-    // 1. Try to extract from a standard long URL or direct ID
+    // 1. NEW: Instantly catch mobile links and tell the user what to do
+    if (inputVal.includes('maps.app.goo.gl') || inputVal.includes('goo.gl/maps')) {
+        showError("Google blocks automatic extraction from short mobile links. \n\nTo fix this: Open the link in your browser, let it load, and paste the massive, expanded URL here instead!");
+        runBtn.disabled = false;
+        return;
+    }
+
+    // 2. Try to extract from a standard long URL or direct ID
     const urlMatch = inputVal.match(/(?:!1s|pano=)([a-zA-Z0-9_\-]{22})/);
     if (urlMatch) {
         panoId = urlMatch[1];
@@ -41,33 +48,9 @@ async function extractDate() {
         panoId = inputVal;
     }
 
-    // 2. NEW: If it's a short link, use a proxy to expand it and find the hidden ID
-    if (!panoId && inputVal.startsWith('http')) {
-        logInfo("Mobile link detected. Unpacking URL via proxy...");
-        try {
-            const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(inputVal);
-            const proxyRes = await fetch(proxyUrl).then(r => r.json());
-            
-            const finalUrl = proxyRes.status.url || "";
-            const html = proxyRes.contents || "";
-            
-            // Look for the ID in the newly expanded URL
-            const proxyMatch = finalUrl.match(/(?:!1s|pano=)([a-zA-Z0-9_\-]{22})/);
-            if (proxyMatch) {
-                panoId = proxyMatch[1];
-            } else {
-                // Last resort: search the actual HTML code of the page for the hidden ID
-                const htmlMatch = html.match(/(?:!1s|pano=|panoid=|"panoId":")([a-zA-Z0-9_\-]{22})/);
-                if (htmlMatch) panoId = htmlMatch[1];
-            }
-        } catch (e) {
-            logInfo("Proxy failed to unpack the mobile link.");
-        }
-    }
-
-    // 3. If we STILL don't have an ID, throw an error
+    // 3. If we STILL don't have an ID, throw a standard error
     if (!panoId) {
-        showError("Could not extract a 22-character Pano ID. Make sure it's a valid Street View link.");
+        showError("Could not extract a 22-character Pano ID. Make sure you are using a fully expanded Street View URL.");
         runBtn.disabled = false;
         return;
     }
@@ -169,7 +152,7 @@ async function extractDate() {
         resultDiv.style.display = 'block';
 
         if (exactUnix >= ceilingLimit - 10) {
-            logInfo(`Search hit the absolute ceiling limit. Exact time unavailable.`);
+            logInfo(`⚠️ Search hit the absolute ceiling limit. Exact time unavailable.`);
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             const fallbackMonth = monthNames[baseDate.month - 1]; 
             
@@ -178,7 +161,7 @@ async function extractDate() {
                     <div class="warning-title">Exact Time Unavailable</div>
                     <div style="margin-bottom: 6px;">Google's database rejected the exact time filter for this spot.</div>
                     Known Capture Month: <span class="success-time" style="color: var(--text-primary); display: inline-block; font-size: 1.1rem; margin-left: 4px;">${fallbackMonth} ${baseDate.year}</span>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;"><b>Tip:</b> Move one click down the street and try the new URL.</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;"><b>Tip:</b> Move one click down the street and try the new URL!</div>
                 </div>
             `;
         } else {
@@ -214,6 +197,7 @@ async function extractDate() {
 
 // Attach event listener
 runBtn.addEventListener('click', extractDate);
+
 
 
 

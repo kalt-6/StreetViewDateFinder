@@ -146,7 +146,7 @@ async function extractDate() {
         resultDiv.style.display = 'block';
 
         if (exactUnix >= ceilingLimit - 10) {
-            logInfo(`\nSearch hit the absolute ceiling limit. Exact time unavailable.`);
+            logInfo(`Search hit the absolute ceiling limit. Exact time unavailable.`);
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             const fallbackMonth = monthNames[baseDate.month - 1]; 
             
@@ -190,4 +190,5 @@ async function extractDate() {
 // Attach event listener
 
 runBtn.addEventListener('click', extractDate);
+
 

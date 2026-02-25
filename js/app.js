@@ -33,8 +33,8 @@ async function extractDate() {
     const inputVal = decodeURIComponent(urlInput.value.trim());
     let panoId = null;
 
-    // 1. NEW: Instantly catch mobile links and tell the user what to do
-    if (inputVal.includes('maps.app.goo.gl') || inputVal.includes('goo.gl/maps')) {
+    // 1. Instantly catch ALL variations of mobile and short links
+    if (inputVal.includes('googleusercontent.com/maps') || inputVal.includes('goo.gl')) {
         showError("Google blocks automatic extraction from short mobile links. \n\nTo fix this: Open the link in your browser, let it load, and paste the massive, expanded URL here instead!");
         runBtn.disabled = false;
         return;
@@ -197,6 +197,7 @@ async function extractDate() {
 
 // Attach event listener
 runBtn.addEventListener('click', extractDate);
+
 
 
 

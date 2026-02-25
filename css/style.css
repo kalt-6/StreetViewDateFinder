@@ -152,18 +152,16 @@ button:disabled {
 
 /* Cards (Logs & Results) */
 .success-box {
-    background-color: rgba(44, 182, 125, 0.15); /* Translucent green background */
-    border: 2px solid var(--accent-secondary); /* Thicker green border to make it pop */
-    padding: 2rem 1rem;
+    background-color: rgba(44, 182, 125, 0.15); 
+    border: 2px solid var(--accent-secondary); 
+    padding: 1.2rem 1rem;
     border-radius: 8px;
     
-    /* Flexbox magic to center everything vertically and horizontally */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    min-height: 160px;
 }
 
 .card {
@@ -213,7 +211,7 @@ button:disabled {
 }
 
 .warning-box { 
-    background-color: rgba(229, 62, 62, 0.1); /* Subtle red background */
+    background-color: rgba(229, 62, 62, 0.1);
     border: 1px solid var(--accent-error);
     padding: 1rem; 
     border-radius: 8px; 
@@ -222,7 +220,7 @@ button:disabled {
 }
 
 .warning-title { 
-    color: var(--accent-error); /* Red title to match the border */
+    color: var(--accent-error);
     font-weight: bold; 
     margin-bottom: 12px; 
     font-size: 1.1rem; 
@@ -237,4 +235,5 @@ button:disabled {
 #logs::-webkit-scrollbar-track { background: #0f0f12; }
 
 #logs::-webkit-scrollbar-thumb { background: #24242b; border-radius: 4px; }
+
 

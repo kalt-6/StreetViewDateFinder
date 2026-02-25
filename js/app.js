@@ -159,7 +159,7 @@ async function extractDate() {
                 </div>
             `;
         } else {
-            logInfo(`\nSuccess! Pinpointed in ${steps} requests.`);
+            logInfo(`Success! Pinpointed in ${steps} requests.`);
             
             const imageTimezone = tz(lat, lng);
             const options = { 
@@ -190,5 +190,6 @@ async function extractDate() {
 // Attach event listener
 
 runBtn.addEventListener('click', extractDate);
+
 
 

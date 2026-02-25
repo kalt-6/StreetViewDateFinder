@@ -198,8 +198,8 @@ button:disabled {
 }
 
 .warning-box { 
-    background-color: var(--accent-warning-bg);
-    border: 1px solid var(--accent-warning-border);
+    background-color: rgba(229, 62, 62, 0.1); /* Subtle red background */
+    border: 1px solid var(--accent-error);
     padding: 1rem; 
     border-radius: 8px; 
     text-align: center; 
@@ -207,7 +207,7 @@ button:disabled {
 }
 
 .warning-title { 
-    color: #ffd700; 
+    color: var(--accent-error); /* Red title to match the border */
     font-weight: bold; 
     margin-bottom: 12px; 
     font-size: 1.1rem; 
@@ -220,4 +220,5 @@ button:disabled {
 /* Custom Scrollbar for logs */
 #logs::-webkit-scrollbar { width: 8px; }
 #logs::-webkit-scrollbar-track { background: #0f0f12; }
+
 #logs::-webkit-scrollbar-thumb { background: #24242b; border-radius: 4px; }

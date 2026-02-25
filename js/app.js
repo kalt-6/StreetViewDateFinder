@@ -33,9 +33,9 @@ async function extractDate() {
     const inputVal = decodeURIComponent(urlInput.value.trim());
     let panoId = null;
 
-    // 1. Instantly catch ALL variations of mobile and short links
-    if (inputVal.includes('googleusercontent.com/maps') || inputVal.includes('goo.gl')) {
-        showError("Google blocks automatic extraction from short mobile links. \n\nTo fix this: Open the link in your browser, let it load, and paste the massive, expanded URL here instead!");
+    // 1. Instantly catch short/mobile links and halt the script
+    if (inputVal.includes('googleusercontent.com/maps') || inputVal.includes('goo.gl') || inputVal.includes('maps.app.goo.gl')) {
+        showError("Google blocks automatic extraction from short mobile links.\n\nTo fix this: Open the link in your browser, let it load, and paste the fully expanded URL here instead.");
         runBtn.disabled = false;
         return;
     }
@@ -112,7 +112,7 @@ async function extractDate() {
         request = pbfish.create("SingleImageSearchRequest");
         request.value = baseRequestContents;
 
-        logInfo("Starting binary search to pinpoint exact time...");
+        logInfo("Starting search to pinpoint exact time...");
         let steps = 0;
 
         while (maxTimestamp - minTimestamp > 2) {
@@ -152,7 +152,7 @@ async function extractDate() {
         resultDiv.style.display = 'block';
 
         if (exactUnix >= ceilingLimit - 10) {
-            logInfo(`⚠️ Search hit the absolute ceiling limit. Exact time unavailable.`);
+            logInfo(`Search hit the absolute ceiling limit. Exact time unavailable.`);
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             const fallbackMonth = monthNames[baseDate.month - 1]; 
             
@@ -197,10 +197,3 @@ async function extractDate() {
 
 // Attach event listener
 runBtn.addEventListener('click', extractDate);
-
-
-
-
-
-
-

@@ -2,7 +2,7 @@
 import Pbfish from 'https://esm.sh/@gmaps-tools/pbfish';
 import tz from 'https://esm.sh/@photostructure/tz-lookup';
 
-// Import our massive local schema dictionary
+// Import local schema dictionary
 import { SingleImageSearch } from './schema.js';
 
 const endpoint = "https://maps.googleapis.com/$rpc/google.internal.maps.mapsjs.v1.MapsJsInternalService/SingleImageSearch";
@@ -172,11 +172,13 @@ async function extractDate() {
             const yourLocalTime = new Intl.DateTimeFormat('en-US', options).format(exactDate);
             
             resultDiv.innerHTML = `
-                <div>Local Time at Image Location:</div>
-                <span class="success">${localPanoTime}</span>
-                
-                <div style="margin-top: 15px;">Your Local Time:</div>
-                <span class="sub-time">${yourLocalTime}</span>
+                <div class="success-box">
+                    <div class="result-label">Location Local Time:</div>
+                    <span class="success-time" style="color: var(--accent-secondary);">${localPanoTime}</span>
+                    
+                    <div class="result-label" style="margin-top: 15px;">Your Local Time:</div>
+                    <span class="success-time" style="font-size: 1.1rem; color: var(--text-secondary);">${yourLocalTime}</span>
+                </div>
             `;
         }
         
@@ -190,6 +192,7 @@ async function extractDate() {
 // Attach event listener
 
 runBtn.addEventListener('click', extractDate);
+
 
 
 

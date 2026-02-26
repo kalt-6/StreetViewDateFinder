@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Street View Date Finder</title>
+    <title>Pano Date Extractor | Find the Exact Time of Street View Images</title>
     <meta name="description" content="A free tool to extract the exact capture date and time (down to the second) from any Google Street View panorama URL using binary search technology.">
     
     <meta name="google-site-verification" content="qMVFPa7KdfV4iW1aj41SmpvVRYAscE_XXkv0nNRKmYk" />
@@ -12,50 +12,73 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8934254710729616" crossorigin="anonymous"></script>
     
     <link rel="icon" type="image/png" href="logo.png">
-
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <div class="main-container">
-        <div class="header">
-            <img src="logo.png" alt="Pano Date Extractor Logo" class="logo">
-            <h1>Street View Date Finder</h1>
+    <header class="site-header">
+        <div class="header-container">
+            <h1>Pano Date Extractor</h1>
+            <nav>
+                <a href="#tool">The Tool</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="#use-cases">Use Cases</a>
+            </nav>
+        </div>
+    </header>
+
+    <section id="tool" class="hero-section">
+        <div class="hero-text">
+            <h2>Uncover the Hidden Timestamps in Street View</h2>
+            <p>Paste any Google Maps Street View URL below to extract the exact local time the image was captured, down to the precise second.</p>
         </div>
         
-        <p class="description">Paste a full Google Maps Street View URL or 22-character ID to find the exact capture timestamp.</p>
-        
-        <div class="disclaimer-box">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="info-icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            <div>
-                <strong>Note:</strong> Finding the exact date for panoramas taken before 2025 can be finicky. If the tool hits a wall, try moving one step down the street and pasting the new link. You can keep moving and retrying until it works. I have gotten images taken as far back as 2008 to work, but I had to spend a lot of time moving around and trying the new link.
+        <div class="main-container">
+            <div class="input-group">
+                <input type="text" id="urlInput" placeholder="Paste Street View URL or 22-character Pano ID here..." autocomplete="off">
+                <button id="runBtn">Extract Time</button>
+            </div>
+            
+            <div id="logs" class="terminal" style="display: none;"></div>
+            <div id="result"></div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="info-section">
+        <div class="info-container">
+            <h2>How Does It Work?</h2>
+            <p>Google Maps publicly displays the capture month and year for its panoramas, but the precise time of day is hidden deep within their backend systems. The Pano Date Extractor interacts directly with the hidden Google Maps API using a rapid <strong>binary search algorithm</strong>.</p>
+            <p>By repeatedly pinging the database with narrowing timestamp filters, the tool pinpoints the exact UNIX timestamp when the Google Street View car snapped the photograph. It then converts this raw data into the accurate local time of the location, automatically adjusting for historical Daylight Saving Time (DST) rules.</p>
+        </div>
+    </section>
+
+    <section id="use-cases" class="features-section">
+        <div class="features-container">
+            <h2>Who is this for?</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🔍 OSINT Researchers</h3>
+                    <p>Verify the exact timeline of events, cross-reference shadows and weather conditions, and establish chronological facts in open-source intelligence investigations.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>GeoGuessr Players</h3>
+                    <p>Study historical capture times to better understand sun angles, shadow lengths, and camera generations across different countries and regions.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Historians & Archivists</h3>
+                    <p>Accurately catalog and date archival street-level imagery for urban development studies and historical documentation.</p>
+                </div>
             </div>
         </div>
-        
-        <div class="input-group">
-            <input type="text" id="urlInput" placeholder="Paste URL or ID here..." spellcheck="false">
+    </section>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <p>&copy; 2026 Pano Date Extractor. All rights reserved.</p>
+            <p class="disclaimer">Not affiliated with Google LLC. This tool is for educational and research purposes.</p>
         </div>
-        
-        <button id="runBtn">Find Exact Date</button>
-        
-        <div id="logs" class="card logs-card"></div>
-        <div id="result" class="card result-card"></div>
-    </div>
+    </footer>
 
     <script type="module" src="js/app.js"></script>
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,13 +1,13 @@
 /* --- BASE VARIABLES & THEME --- */
 :root {
-    --bg-main: #0f0a18; /* Deep dark purple background */
-    --bg-card: #1a1325; /* Slightly lighter purple for cards/containers */
+    --bg-main: #0f0a18;
+    --bg-card: #1a1325; 
     --text-primary: #ffffff;
     --text-secondary: #b3a8c4;
-    --accent-primary: #8a2be2; /* Main purple button color */
+    --accent-primary: #8a2be2; 
     --accent-primary-hover: #9b4dff;
-    --accent-secondary: #2cb67d; /* Success Green */
-    --accent-error: #e53e3e; /* Error Red */
+    --accent-secondary: #2cb67d;
+    --accent-error: #e53e3e; 
     --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -86,12 +86,12 @@ body {
 /* --- MAIN APP CONTAINER --- */
 .main-container { 
     background: var(--bg-card);
-    padding: 2.5rem 2.5rem 1.5rem 2.5rem; /* Specifically tuned for vertical balance */
+    padding: 2.5rem 2.5rem 1.5rem 2.5rem; 
     border-radius: 16px; 
     max-width: 650px; 
     margin: 0 auto; 
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    text-align: left; /* Keeps the text inside the tool aligned properly */
+    text-align: left; 
     border: 1px solid rgba(255,255,255,0.05);
 }
 
@@ -138,11 +138,11 @@ button:disabled {
 
 .terminal {
     background: #000;
-    color: #0f0;
+    color: #ffffff; 
     font-family: monospace;
     padding: 1rem;
     border-radius: 8px;
-    height: 150px; /* Fixed height so PC users don't have to scroll */
+    height: 150px; 
     overflow-y: auto;
     font-size: 0.85rem;
     white-space: pre-wrap;
@@ -159,7 +159,7 @@ button:disabled {
     justify-content: center;
     align-items: center;
     text-align: center;
-    margin-top: 1.5rem; /* Pushes cleanly off the terminal */
+    margin-top: 1.5rem; 
 }
 
 .result-label {
@@ -213,7 +213,7 @@ button:disabled {
 .info-container h2, .features-container h2 {
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
-    color: var(--accent-primary); /* Uses your purple */
+    color: var(--accent-primary);
 }
 
 .info-container p {
@@ -275,4 +275,35 @@ button:disabled {
     .input-group {
         flex-direction: column;
     }
+    
+    /* PREVENTS iOS SAFARI FROM AUTO-ZOOMING */
+    input[type="text"] {
+        font-size: 16px; 
+    }
+}
+
+/* --- CUSTOM DARK SCROLLBARS --- */
+/* For Chrome, Edge, and Safari */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-main);
+    border-radius: 0 8px 8px 0;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3a2a50; 
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary);
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #3a2a50 var(--bg-main);
 }

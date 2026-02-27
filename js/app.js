@@ -161,7 +161,6 @@ async function extractDate() {
                     <div class="warning-title">Exact Time Unavailable</div>
                     <div style="margin-bottom: 6px;">Google's database rejected the exact time filter for this spot.</div>
                     Known Capture Month: <span class="success-time" style="color: var(--text-primary); display: inline-block; font-size: 1.1rem; margin-left: 4px;">${fallbackMonth} ${baseDate.year}</span>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;"><b>Tip:</b> Move one click down the street and try the new URL!</div>
                 </div>
             `;
         } else {
@@ -197,3 +196,4 @@ async function extractDate() {
 
 // Attach event listener
 runBtn.addEventListener('click', extractDate);
+

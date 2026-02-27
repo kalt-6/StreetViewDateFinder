@@ -29,7 +29,7 @@
 
     <section id="tool" class="hero-section">
         <div class="hero-text">
-            <h2>Find the Exact Date and Time of a Street View Image</h2>
+            <h2>Find the Exact Date of a Street View Image</h2>
             <p>Paste any Google Maps Street View URL below to extract the exact local time the image was captured, down to the precise second.</p>
         </div>
         
@@ -47,8 +47,8 @@
     <section id="how-it-works" class="info-section">
         <div class="info-container">
             <h2>How Does It Work?</h2>
-            <p>Google Maps publicly displays the capture month and year for its panoramas, but the precise time of day is hidden deep within their backend systems. The Pano Date Extractor interacts directly with the hidden Google Maps API using a rapid <strong>binary search algorithm</strong>.</p>
-            <p>By repeatedly pinging the database with narrowing timestamp filters, the tool pinpoints the exact UNIX timestamp when the Google Street View car snapped the photograph. It then converts this raw data into the accurate local time of the location, automatically adjusting for historical Daylight Saving Time (DST) rules.</p>
+            <p>Google Maps publicly displays the capture month and year for its panoramas, but the precise time of day is hidden deep within their backend systems. This application interacts directly with the hidden Google Maps API using a binary search algorithm.</p>
+            <p>By repeatedly pinging the database with narrowing timestamp filters, the tool pinpoints the exact UNIX timestamp when the Google Street View car snapped the photograph. It then converts this raw data into the accurate local time of the location, while also automatically adjusting for Daylight Saving Time (DST) rules where applicable.</p>
         </div>
     </section>
 
@@ -82,5 +82,6 @@
     <script type="module" src="js/app.js"></script>
 </body>
 </html>
+
 
 

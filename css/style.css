@@ -7,7 +7,7 @@
     --accent-primary: #8a2be2; 
     --accent-primary-hover: #9b4dff;
     --accent-secondary: #00e676;
-    --accent-error: #e53e3e; 
+    --accent-error: #ff1744; 
     --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -307,4 +307,5 @@ button:disabled {
     scrollbar-width: thin;
     scrollbar-color: #3a2a50 var(--bg-main);
 }
+
 

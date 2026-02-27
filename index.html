@@ -18,7 +18,10 @@
 
     <header class="site-header">
         <div class="header-container">
-            <h1>Street View Date Finder</h1>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="logo.png" alt="Street View Date Finder Logo" style="width: 32px; height: 32px; border-radius: 4px;">
+                <h1 style="margin: 0;">Street View Date Finder</h1>
+            </div>
             <nav>
                 <a href="#tool">The Tool</a>
                 <a href="#how-it-works">How it Works</a>
@@ -29,8 +32,11 @@
 
     <section id="tool" class="hero-section">
         <div class="hero-text">
-            <h2>Find the Exact Date of a Street View Image</h2>
-            <p>Paste any Google Maps Street View URL below to extract the exact local time the image was captured, down to the precise second.</p>
+            <h2>Uncover the Hidden Timestamps in Street View</h2>
+            <p style="margin-bottom: 0.5rem;">Paste any Google Maps Street View URL below to extract the exact local time the image was captured, down to the precise second.</p>
+            <p style="font-size: 0.9rem; color: var(--accent-error); margin-top: 0; margin-bottom: 3rem;">
+                <em>Note: Finding exact timestamps for panoramas taken prior to 2025 can be a bit finicky. If the tool fails to find th exact date of a panorama, you can try moving one step down the road and trying the new link. I have gotten images as old as 2008 to work with a bit of effort.</em>
+            </p>
         </div>
         
         <div class="main-container">
@@ -47,8 +53,8 @@
     <section id="how-it-works" class="info-section">
         <div class="info-container">
             <h2>How Does It Work?</h2>
-            <p>Google Maps publicly displays the capture month and year for its panoramas, but the precise time of day is hidden deep within their backend systems. This application interacts directly with the hidden Google Maps API using a binary search algorithm.</p>
-            <p>By repeatedly pinging the database with narrowing timestamp filters, the tool pinpoints the exact UNIX timestamp when the Google Street View car snapped the photograph. It then converts this raw data into the accurate local time of the location, while also automatically adjusting for Daylight Saving Time (DST) rules where applicable.</p>
+            <p>Google Maps publicly displays the capture month and year for its panoramas, but the precise time of day is hidden deep within their backend systems. The Pano Date Extractor interacts directly with the hidden Google Maps API using a rapid <strong>binary search algorithm</strong>.</p>
+            <p>By repeatedly pinging the database with narrowing timestamp filters, the tool pinpoints the exact UNIX timestamp when the Google Street View car snapped the photograph. It then converts this raw data into the accurate local time of the location, automatically adjusting for historical Daylight Saving Time (DST) rules.</p>
         </div>
     </section>
 
@@ -82,6 +88,3 @@
     <script type="module" src="js/app.js"></script>
 </body>
 </html>
-
-
-

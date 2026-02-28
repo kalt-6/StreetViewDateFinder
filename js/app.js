@@ -1,3 +1,22 @@
+// --- SMOOTH SCROLLING (NO URL HASH) ---
+document.querySelectorAll('nav a').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        
+        // Only intercept if it's an anchor link starting with '#'
+        if (targetId.startsWith('#')) {
+            e.preventDefault(); // Stops the URL from changing
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        }
+    });
+});
+
 // Import external dependencies via CDN
 import Pbfish from 'https://esm.sh/@gmaps-tools/pbfish';
 import tz from 'https://esm.sh/@photostructure/tz-lookup';
@@ -196,4 +215,5 @@ async function extractDate() {
 
 // Attach event listener
 runBtn.addEventListener('click', extractDate);
+
 

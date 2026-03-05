@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Street View Date Finder</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .blog-container { max-width: 800px; margin: 4rem auto; padding: 0 2rem; }
+        .blog-header { text-align: center; margin-bottom: 3rem; }
+        .blog-header h2 { color: var(--text-primary); font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .blog-header p { color: var(--text-secondary); font-size: 1.1rem; }
+        
+        .article-card { background-color: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 1.5rem; transition: transform 0.2s, border-color 0.2s; }
+        .article-card:hover { transform: translateY(-3px); border-color: var(--accent-primary); }
+        .article-card h3 { margin-top: 0; font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .article-card h3 a { color: var(--text-primary); text-decoration: none; }
+        .article-card p { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1rem; }
+        .article-date { font-size: 0.8rem; color: var(--accent-primary); font-weight: bold; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-container">
+            <div>
+                <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;">
+                    <img src="logo.png" alt="Street View Date Finder Logo" style="width: 32px; height: 32px; border-radius: 4px;">
+                    <h1 style="margin: 0; font-size: 1.2rem;">Street View Date Finder</h1>
+                </a>
+            </div>
+            <nav>
+                <a href="/">Back to Tool</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="blog-container">
+        <div class="blog-header">
+            <h2>Articles & Research</h2>
+            <p>Deep dives into OSINT, GeoGuessr strategies, and Google Maps history.</p>
+        </div>
+
+        <article class="article-card">
+            <div class="article-date">March 2026</div>
+            <h3><a href="blog-geoguessr-shadows.html">How GeoGuessr Players Use Shadows to Pinpoint Exact Locations</a></h3>
+            <p>Discover the advanced techniques top-tier GeoGuessr players use to determine the hemisphere, time of year, and exact time of day using nothing but sun angles and shadow lengths in Google Street View.</p>
+        </article>
+        
+        </div>
+</body>
+</html>

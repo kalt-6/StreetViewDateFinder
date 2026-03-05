@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSINT Guide: Verifying Historical Timelines Using Google Street View | Street View Date Finder</title>
+    <meta name="description" content="Learn how Open-Source Intelligence (OSINT) researchers use Google Street View imagery to establish timelines, verify events, and track urban changes.">
+    
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <style>
+        .article-container { max-width: 800px; margin: 4rem auto; background: var(--bg-card); padding: 2.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .article-container h1 { color: var(--accent-primary); margin-top: 0; margin-bottom: 0.5rem; font-size: 2.2rem; line-height: 1.2; }
+        .article-container .article-meta { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; display: flex; justify-content: space-between; }
+        .article-container h2 { color: var(--text-primary); margin-top: 2.5rem; font-size: 1.5rem; }
+        .article-container h3 { color: var(--text-primary); margin-top: 1.5rem; font-size: 1.2rem; }
+        .article-container p, .article-container li { color: var(--text-secondary); margin-bottom: 1.2rem; line-height: 1.8; font-size: 1.05rem; }
+        .article-container a { color: var(--accent-primary); text-decoration: none; }
+        .article-container a:hover { text-decoration: underline; }
+        .article-container .tool-promo { background: linear-gradient(145deg, rgba(138, 43, 226, 0.05), rgba(138, 43, 226, 0.15)); border: 1px solid var(--accent-primary); padding: 1.5rem; border-radius: 8px; margin-top: 3rem; text-align: center; }
+        .article-container .tool-promo h3 { margin-top: 0; color: var(--accent-primary); }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-container">
+            <div>
+                <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;">
+                    <img src="/logo.png" alt="Street View Date Finder Logo" style="width: 32px; height: 32px; border-radius: 4px;">
+                    <h1 style="margin: 0; font-size: 1.2rem;">Street View Date Finder</h1>
+                </a>
+            </div>
+            <nav>
+                <a href="/blog/">Back to Blog</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="article-container">
+        <h1>OSINT Guide: Verifying Historical Timelines Using Google Street View</h1>
+        <div class="article-meta">
+            <span>Published: March 2026</span>
+            <span>Category: OSINT Research</span>
+        </div>
+
+        <p>In Open-Source Intelligence (OSINT) investigations, establishing a reliable, chronological timeline is often the hardest part of the job. Whether you are verifying the location of a viral video, tracking urban development, or investigating environmental changes, you need hard data. This is where Google Street View becomes one of the most powerful free tools in an investigator's arsenal.</p>
+        
+        <p>However, simply looking at a picture isn't enough. Investigators must know how to dig into the metadata and cross-reference physical clues to build an airtight timeline.</p>
+
+        <h2>1. The Power of the "Time Machine" Feature</h2>
+        <p>Most casual users don't realize that Google Maps keeps an archive of almost every Street View panorama they have ever captured. By clicking "See more dates" in the top-left corner of the desktop interface, investigators can scrub through historical imagery dating back to 2007.</p>
+        <p>This allows researchers to perform <strong>temporal comparisons</strong>. By comparing an image from 2014 to an image from 2022, investigators can pinpoint when a specific building was demolished, when a new business opened, or when a road sign was altered. This creates a hard "before and after" bracket for timeline verification.</p>
+
+        <h2>2. Cross-Referencing Physical Clues</h2>
+        <p>Even with historical imagery, OSINT researchers rely on environmental and physical clues to narrow down the context of the capture:</p>
+        <ul>
+            <li><strong>Construction Progress:</strong> The state of a scaffolding or the specific floor being added to a skyscraper can be cross-referenced with local city planning records or news reports.</li>
+            <li><strong>Foliage and Weather:</strong> The presence of snow, the color of leaves, or the bareness of trees can quickly confirm if an image aligns with the stated capture month.</li>
+            <li><strong>Vehicles and Billboards:</strong> Temporary elements like political campaign billboards, movie posters, or the license plates/models of parked cars provide excellent secondary verification points.</li>
+        </ul>
+
+        <h2>3. The Limitation of "Month/Year" Data</h2>
+        <p>While Google's built-in historical archive is incredible, it has a glaring flaw for deep technical investigations: it only gives you the Month and the Year. If a critical event happened on a Tuesday morning, knowing that the Street View car drove by sometime in "August" isn't specific enough.</p>
+        <p>For example, if an investigator is trying to verify if a vehicle was parked in a specific driveway during a known incident, they need the exact day and time the Street View image was captured to ensure it aligns with the investigation's timeline.</p>
+
+        <h2>4. Extracting the Exact Timestamp</h2>
+        <p>To overcome this limitation, advanced OSINT investigators bypass the standard Google Maps user interface entirely and interact directly with the hidden backend API. By querying the panorama's unique ID, it is possible to extract the precise UNIX timestamp—down to the second—that the camera shutter clicked.</p>
+        
+        <div class="tool-promo">
+            <h3>Automate Your Timeline Verification</h3>
+            <p>Skip the manual API queries. Our free tool uses a rapid binary search algorithm to instantly extract the exact local time and date from any Street View URL.</p>
+            <a href="/" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background: var(--accent-primary); color: white; border-radius: 6px; font-weight: bold;">Extract a Timestamp Now</a>
+        </div>
+    </div>
+</body>
+</html>

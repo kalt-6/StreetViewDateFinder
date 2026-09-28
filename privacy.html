@@ -7,13 +7,172 @@
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .legal-container { max-width: 800px; margin: 4rem auto; background: var(--bg-card); padding: 2.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        .legal-container h1 { color: var(--accent-primary); margin-top: 0; margin-bottom: 0.5rem; font-size: 2.2rem; }
-        .legal-container .last-updated { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; }
-        .legal-container h2 { color: var(--text-primary); margin-top: 2rem; font-size: 1.3rem; }
-        .legal-container p, .legal-container li { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.7; }
-        .legal-container a { color: var(--accent-primary); text-decoration: none; }
-        .legal-container a:hover { text-decoration: underline; }
+        :root {
+            --bg-page: #0d0e15;
+            --bg-card: #151622;
+            --bg-card-subtle: #1c1d2e;
+            --accent-primary: #9d4edd;
+            --accent-glow: rgba(157, 78, 221, 0.25);
+            --accent-secondary: #7b2cbf;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a3bd;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(157, 78, 221, 0.35);
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .legal-container { 
+            max-width: 820px; 
+            margin: 3.5rem auto; 
+            background: var(--bg-card); 
+            padding: 3rem; 
+            border-radius: 16px; 
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        .breadcrumbs {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .breadcrumbs a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .breadcrumbs a:hover {
+            color: var(--accent-primary);
+        }
+
+        .legal-container h1 { 
+            color: var(--text-primary); 
+            margin: 0 0 0.75rem 0; 
+            font-size: 2.35rem; 
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .legal-meta { 
+            color: var(--text-secondary); 
+            font-size: 0.9rem; 
+            margin-bottom: 2.5rem; 
+            border-bottom: 1px solid var(--border-subtle); 
+            padding-bottom: 1.2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+
+        .legal-card {
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.6rem 1.85rem;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .legal-card:hover {
+            border-color: var(--border-accent);
+        }
+
+        .legal-card h2 { 
+            color: var(--text-primary); 
+            margin: 0 0 0.75rem 0; 
+            font-size: 1.25rem; 
+            font-weight: 700;
+        }
+
+        .legal-card p, .legal-card li { 
+            color: var(--text-secondary); 
+            margin-bottom: 0.85rem; 
+            line-height: 1.75; 
+            font-size: 0.98rem; 
+        }
+
+        .legal-card ul {
+            margin: 0.75rem 0 1rem 0;
+            padding-left: 1.25rem;
+        }
+
+        .legal-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .legal-card a { 
+            color: var(--accent-primary); 
+            text-decoration: none; 
+            font-weight: 600;
+        }
+
+        .legal-card a:hover { 
+            text-decoration: underline; 
+        }
+
+        .site-footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 3rem 1.5rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-container p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0 0 0.35rem 0;
+        }
+
+        .disclaimer {
+            font-size: 0.8rem !important;
+            color: #6f728c !important;
+        }
+
+        .footer-links {
+            margin-top: 1.25rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 0.85rem;
+        }
+
+        .footer-links a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #b366f9;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .legal-container {
+                padding: 1.75rem;
+                margin: 1.5rem 1rem;
+            }
+            .legal-container h1 {
+                font-size: 1.85rem;
+            }
+            .legal-card {
+                padding: 1.25rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -36,31 +195,59 @@
         </div>
     </header>
 
-    <div class="legal-container">
+    <main class="legal-container">
+        <div class="breadcrumbs">
+            <a href="/">Home</a> <span>/</span> <span>Legal</span>
+        </div>
+
         <h1>Privacy Policy</h1>
-        <p class="last-updated">Last updated: February 2026</p>
+        <div class="legal-meta">
+            <span>Last updated: February 2026</span>
+            <span>Street View Date Finder</span>
+        </div>
 
-        <h2>1. Information We Collect</h2>
-        <p>Because our tool is designed to be free and accessible, we collect as little information about you as possible. We do not require you to create an account, log in, or provide an email address.</p>
-        
-        <p><strong>Information You Input (Not Stored)</strong><br>
-        When you use the Street View Date Finder, you input Google Maps URLs or Pano IDs. This data is processed locally by your browser to fetch the exact timestamp directly from Google’s public APIs. We do not save, store, or log the locations, URLs, or IDs you search. Once you close the page, that data is gone.</p>
+        <section class="legal-card">
+            <h2>1. Data Collection Practices</h2>
+            <p>Our service requires minimal personal identification. Users can access all features freely without registering an account, providing an email, or logging into any profile.</p>
+            
+            <p><strong style="color: var(--text-primary);">Submitted Queries (Zero Persistence)</strong><br>
+            Submitted panorama identifiers or Google Maps URLs are evaluated directly within your browser runtime to query public interfaces. We never log, persist, or retain your queries, locations, or submitted links on external databases. Once a browser tab is dismissed, all temporary query data vanishes.</p>
 
-        <p><strong>Automatically Collected Information & Cookies</strong><br>
-        Like almost all websites, our hosting servers automatically collect basic log data when you visit the site. This may include your IP address, browser type, operating system, and the time and date of your visit. This data is used strictly for maintaining the security and functionality of the website.</p>
+            <p><strong style="color: var(--text-primary);">Diagnostic Logs & Hosting Metrics</strong><br>
+            Standard web hosting infrastructure logs general connection telemetry when requests arrive, such as IP addresses, browser specifications, operating system details, and visit timestamps. These logs are used purely for system security and network stability.</p>
+        </section>
 
-        <h2>2. Third-Party Advertising (Google AdSense)</h2>
-        <p>To keep this tool free, we use Google AdSense to display advertisements. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to our website or other websites on the internet.</p>
-        <ul>
-            <li>Google's use of advertising cookies enables it and its partners to serve ads to your users based on their visit to your sites and/or other sites on the Internet.</li>
-            <li>You may opt out of personalized advertising by visiting Google's <a href="https://www.google.com/settings/ads" target="_blank">Ads Settings</a>.</li>
-        </ul>
+        <section class="legal-card">
+            <h2>2. Advertising Partners (Google AdSense)</h2>
+            <p>Display advertising through Google AdSense helps keep this tool accessible free of charge. Third-party providers, including Google, leverage browser cookies to serve relevant promotions based on earlier site visits across the web.</p>
+            <ul>
+                <li>These advertising cookies allow network partners to deliver tailored promotional material informed by browsing activity.</li>
+                <li>Users can disable personalized ad tracking at any point via <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ads Settings</a>.</li>
+            </ul>
+        </section>
 
-        <h2>3. External Links</h2>
-        <p>Our website may contain links to external sites that are not operated by us. Please be aware that we have no control over the content and practices of these sites, and cannot accept responsibility or liability for their respective privacy policies.</p>
+        <section class="legal-card">
+            <h2>3. Third-Party Destinations</h2>
+            <p>Our pages may feature references or links pointing to third-party web domains. We exercise no administrative control over external platforms and bear no responsibility for their distinct privacy guidelines or practices.</p>
+        </section>
 
-        <h2>4. Contact Us</h2>
-        <p>If you have any questions about this Privacy Policy, you can contact us at: <a href="mailto:email@gmail.com">email@gmail.com</a></p>
-    </div>
+        <section class="legal-card">
+            <h2>4. Contact</h2>
+            <p>If you have questions regarding our data protection policies, please contact us via: <a href="mailto:email@gmail.com">email@gmail.com</a>.</p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="content-wrapper footer-container">
+            <p>&copy; 2026 Pano Date Extractor. All rights reserved.</p>
+            <p class="disclaimer">Not affiliated with Google LLC. This tool is for educational and research purposes.</p>
+            
+            <div class="footer-links">
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+                <a href="mailto:email@gmail.com">Contact Us</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

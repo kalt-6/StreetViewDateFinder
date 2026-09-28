@@ -41,7 +41,6 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
         }
 
-        /* Typography & Header */
         .article-breadcrumbs {
             font-size: 0.85rem;
             color: var(--text-secondary);
@@ -116,7 +115,6 @@
             line-height: 1.75;
         }
 
-        /* OSINT Section Cards */
         .osint-card {
             background: var(--bg-card-subtle);
             border: 1px solid var(--border-subtle);
@@ -166,7 +164,6 @@
             font-weight: 500;
         }
 
-        /* 3-Column Clue Grid */
         .clues-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -200,7 +197,6 @@
             color: var(--text-secondary);
         }
 
-        /* Pro Tip & Warning Callouts */
         .callout-box {
             display: flex;
             align-items: flex-start;
@@ -230,7 +226,6 @@
             line-height: 1.6;
         }
 
-        /* Reference Table */
         .specs-table-container {
             overflow-x: auto;
             margin: 2.5rem 0;
@@ -268,7 +263,6 @@
             background: rgba(255, 255, 255, 0.02);
         }
 
-        /* Promo CTA Card */
         .article-container .tool-promo { 
             position: relative;
             background: radial-gradient(circle at top right, rgba(157, 78, 221, 0.18), transparent 70%), 
@@ -377,8 +371,8 @@
                 <h2><span class="step-badge">STEP 01</span> The "Time Machine" Archive</h2>
                 <span class="step-category">Temporal Bracketing</span>
             </div>
-            <p>Google Maps retains an expansive repository of older Street View imagery dating back to 2007[cite: 3]. By selecting the <strong>"See more dates"</strong> option in the desktop viewer, analysts can cycle through previous drives along the same road segments[cite: 3].</p>
-            <p>This functionality provides the baseline for <strong>temporal comparisons</strong>[cite: 3]. Comparing captures from 2014 and 2022 allows investigators to confirm when a structure was demolished, when commercial storefronts turned over, or when road signage was modified, establishing rigid before-and-after bounds for an incident timeline[cite: 3].</p>
+            <p>Google Maps retains an expansive repository of older Street View imagery dating back to 2007. By selecting the <strong>"See more dates"</strong> option in the desktop viewer, analysts can cycle through previous drives along the same road segments.</p>
+            <p>This functionality provides the baseline for <strong>temporal comparisons</strong>. Comparing captures from 2014 and 2022 allows investigators to confirm when a structure was demolished, when commercial storefronts turned over, or when road signage was modified, establishing rigid before-and-after bounds for an incident timeline.</p>
         </section>
 
         <!-- Method 02 -->
@@ -387,23 +381,23 @@
                 <h2><span class="step-badge">STEP 02</span> Cross-Referencing Physical Clues</h2>
                 <span class="step-category">Environmental Anchors</span>
             </div>
-            <p>When working through chronological archives, analysts evaluate physical and seasonal markers in the frame to corroborate capture windows[cite: 3]:</p>
+            <p>When working through chronological archives, analysts evaluate physical and seasonal markers in the frame to corroborate capture windows:</p>
             
             <div class="clues-grid">
                 <div class="clue-box">
                     <span class="clue-icon">🏗️</span>
                     <strong>Construction Milestones</strong>
-                    <p>Scaffolding progress and active floor additions cross-checked with municipal planning permits or press coverage[cite: 3].</p>
+                    <p>Scaffolding progress and active floor additions cross-checked with municipal planning permits or press coverage.</p>
                 </div>
                 <div class="clue-box">
                     <span class="clue-icon">🍂</span>
                     <strong>Foliage & Climate</strong>
-                    <p>Snow ground coverage, canopy leaf density, and autumnal changes verifying whether seasons align with listed capture dates[cite: 3].</p>
+                    <p>Snow ground coverage, canopy leaf density, and autumnal changes verifying whether seasons align with listed capture dates.</p>
                 </div>
                 <div class="clue-box">
                     <span class="clue-icon">🚗</span>
                     <strong>Ephemera & Vehicles</strong>
-                    <p>Commercial billboards, election posters, movie promotions, and registered vehicle generations providing secondary confirmation[cite: 3].</p>
+                    <p>Commercial billboards, election posters, movie promotions, and registered vehicle generations providing secondary confirmation.</p>
                 </div>
             </div>
         </section>
@@ -414,11 +408,11 @@
                 <h2><span class="step-badge">STEP 03</span> The "Month/Year" UI Bottleneck</h2>
                 <span class="step-category">Precision Limitations</span>
             </div>
-            <p>While the built-in interface offers historical captures, the UI watermark restricts dates strictly to the month and year[cite: 3]. For acute temporal investigations, knowing a vehicle was photographed sometime during "August" lacks sufficient precision[cite: 3].</p>
+            <p>While the built-in interface offers historical captures, the UI watermark restricts dates strictly to the month and year. For acute temporal investigations, knowing a vehicle was photographed sometime during "August" lacks sufficient precision.</p>
             
             <div class="callout-box callout-warning">
                 <div class="callout-icon">⚠️</div>
-                <p><strong>Forensic Gap:</strong> If an incident occurred on a specific Tuesday morning, a month-level stamp cannot prove whether a suspect car parked in a driveway was photographed before, during, or after that critical window[cite: 3].</p>
+                <p><strong>Forensic Gap:</strong> If an incident occurred on a specific Tuesday morning, a month-level stamp cannot prove whether a suspect car parked in a driveway was photographed before, during, or after that critical window.</p>
             </div>
         </section>
 
@@ -428,8 +422,8 @@
                 <h2><span class="step-badge">STEP 04</span> Second-Level Timestamp Extraction</h2>
                 <span class="step-category">Backend API Data</span>
             </div>
-            <p>To overcome UI data loss, investigators query Google's underlying Street View backend directly using the unique panorama ID[cite: 3].</p>
-            <p style="margin-bottom: 0;">Accessing the raw payload reveals the unaltered <strong>UNIX timestamp down to the second</strong>, exposing the exact instant the vehicle's camera shutter was triggered[cite: 3].</p>
+            <p>To overcome UI data loss, investigators query Google's underlying Street View backend directly using the unique panorama ID.</p>
+            <p style="margin-bottom: 0;">Accessing the raw payload reveals the unaltered <strong>UNIX timestamp down to the second</strong>, exposing the exact instant the vehicle's camera shutter was triggered.</p>
         </section>
 
         <!-- Matrix Reference Table -->
@@ -446,23 +440,23 @@
                 <tbody>
                     <tr>
                         <td><strong style="color: var(--text-primary);">Infrastructure Changes</strong></td>
-                        <td>Scaffolding, floor levels, demolished facades[cite: 3]</td>
-                        <td>Matches local municipal filings & news releases[cite: 3]</td>
+                        <td>Scaffolding, floor levels, demolished facades</td>
+                        <td>Matches local municipal filings & news releases</td>
                     </tr>
                     <tr>
                         <td><strong style="color: var(--text-primary);">Seasonal Consistency</strong></td>
-                        <td>Snow accumulation, bare branches, leaf coloration[cite: 3]</td>
-                        <td>Confirms alleged season of capture[cite: 3]</td>
+                        <td>Snow accumulation, bare branches, leaf coloration</td>
+                        <td>Confirms alleged season of capture</td>
                     </tr>
                     <tr>
                         <td><strong style="color: var(--text-primary);">Ephemeral Events</strong></td>
-                        <td>Movie release billboards, political election signage[cite: 3]</td>
-                        <td>Narrows target date to a defined advertising run[cite: 3]</td>
+                        <td>Movie release billboards, political election signage</td>
+                        <td>Narrows target date to a defined advertising run</td>
                     </tr>
                     <tr>
                         <td><strong style="color: var(--text-primary);">Forensic Alibi Checks</strong></td>
-                        <td>Vehicles in driveways, business operational status[cite: 3]</td>
-                        <td>Requires exact second-level UNIX timestamps to confirm[cite: 3]</td>
+                        <td>Vehicles in driveways, business operational status</td>
+                        <td>Requires exact second-level UNIX timestamps to confirm</td>
                     </tr>
                 </tbody>
             </table>
@@ -471,7 +465,7 @@
         <!-- Promo CTA Card -->
         <div class="tool-promo">
             <h3>Automate Your Timeline Verification</h3>
-            <p>Bypass manual API inspection[cite: 3]. Our tool runs a rapid binary search to extract the exact local time and date from any Street View URL instantly[cite: 3].</p>
+            <p>Bypass manual API inspection. Our tool runs a rapid binary search to extract the exact local time and date from any Street View URL instantly.</p>
             <a href="/" class="promo-btn">Extract a Timestamp Now →</a>
         </div>
     </main>

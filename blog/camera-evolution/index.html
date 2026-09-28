@@ -10,16 +10,283 @@
     <link rel="stylesheet" href="/css/style.css">
     
     <style>
-        .article-container { max-width: 800px; margin: 4rem auto; background: var(--bg-card); padding: 2.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        .article-container h1 { color: var(--accent-primary); margin-top: 0; margin-bottom: 0.5rem; font-size: 2.2rem; line-height: 1.2; }
-        .article-container .article-meta { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; display: flex; justify-content: space-between; }
-        .article-container h2 { color: var(--text-primary); margin-top: 2.5rem; font-size: 1.5rem; }
-        .article-container h3 { color: var(--text-primary); margin-top: 1.5rem; font-size: 1.2rem; }
-        .article-container p, .article-container li { color: var(--text-secondary); margin-bottom: 1.2rem; line-height: 1.8; font-size: 1.05rem; }
-        .article-container a { color: var(--accent-primary); text-decoration: none; }
-        .article-container a:hover { text-decoration: underline; }
-        .article-container .tool-promo { background: linear-gradient(145deg, rgba(138, 43, 226, 0.05), rgba(138, 43, 226, 0.15)); border: 1px solid var(--accent-primary); padding: 1.5rem; border-radius: 8px; margin-top: 3rem; text-align: center; }
-        .article-container .tool-promo h3 { margin-top: 0; color: var(--accent-primary); }
+        :root {
+            --bg-page: #0d0e15;
+            --bg-card: #151622;
+            --bg-card-subtle: #1c1d2e;
+            --accent-primary: #9d4edd;
+            --accent-glow: rgba(157, 78, 221, 0.25);
+            --accent-secondary: #7b2cbf;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a3bd;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(157, 78, 221, 0.35);
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .article-container { 
+            max-width: 820px; 
+            margin: 3.5rem auto; 
+            background: var(--bg-card); 
+            padding: 3rem; 
+            border-radius: 16px; 
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        /* Typography & Header */
+        .article-breadcrumbs {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .article-breadcrumbs a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .article-breadcrumbs a:hover {
+            color: var(--accent-primary);
+        }
+
+        .article-container h1 { 
+            color: var(--text-primary); 
+            margin-top: 0; 
+            margin-bottom: 1rem; 
+            font-size: 2.35rem; 
+            line-height: 1.25; 
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 40%, var(--accent-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .article-container .article-meta { 
+            color: var(--text-secondary); 
+            font-size: 0.9rem; 
+            margin-bottom: 2.5rem; 
+            border-bottom: 1px solid var(--border-subtle); 
+            padding-bottom: 1.2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .meta-tags {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .tag-pill {
+            background: rgba(157, 78, 221, 0.15);
+            color: var(--accent-primary);
+            border: 1px solid var(--border-accent);
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .article-container p, .article-container li { 
+            color: var(--text-secondary); 
+            margin-bottom: 1.35rem; 
+            line-height: 1.85; 
+            font-size: 1.05rem; 
+        }
+
+        .intro-lead {
+            font-size: 1.15rem !important;
+            color: #d1d4e6 !important;
+            line-height: 1.75;
+        }
+
+        /* Generation Cards */
+        .gen-card {
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.75rem 2rem;
+            margin: 2rem 0;
+            position: relative;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .gen-card:hover {
+            border-color: var(--border-accent);
+        }
+
+        .gen-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .gen-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gen-badge {
+            background: var(--accent-secondary);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            letter-spacing: 0.05em;
+        }
+
+        .gen-years {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Pro Tip Callout Box */
+        .pro-tip {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: rgba(157, 78, 221, 0.08);
+            border-left: 3px solid var(--accent-primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.25rem 0 0.5rem 0;
+        }
+
+        .pro-tip-icon {
+            font-size: 1.15rem;
+            line-height: 1.4;
+            flex-shrink: 0;
+        }
+
+        .pro-tip p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #cfd2e8;
+            line-height: 1.6;
+        }
+
+        /* Quick Reference Table */
+        .specs-table-container {
+            overflow-x: auto;
+            margin: 2.5rem 0;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            text-align: left;
+            background: var(--bg-card-subtle);
+        }
+
+        .specs-table th {
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-primary);
+            font-weight: 600;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .specs-table td {
+            padding: 13px 16px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .specs-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .specs-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Promo CTA Card */
+        .article-container .tool-promo { 
+            position: relative;
+            background: radial-gradient(circle at top right, rgba(157, 78, 221, 0.18), transparent 70%), 
+                        linear-gradient(145deg, #171626, #12121d);
+            border: 1px solid var(--border-accent); 
+            padding: 2.25rem 2rem; 
+            border-radius: 14px; 
+            margin-top: 3.5rem; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .article-container .tool-promo h3 { 
+            margin-top: 0; 
+            color: #ffffff; 
+            font-size: 1.45rem;
+            letter-spacing: -0.01em;
+        }
+
+        .article-container .tool-promo p {
+            max-width: 580px;
+            margin: 0.75rem auto 1.5rem auto;
+            color: #b5b8d0;
+        }
+
+        .promo-btn {
+            display: inline-block; 
+            padding: 12px 26px; 
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); 
+            color: #ffffff; 
+            border-radius: 8px; 
+            font-weight: 700;
+            font-size: 0.98rem;
+            text-decoration: none;
+            box-shadow: 0 4px 18px var(--accent-glow);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .promo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(157, 78, 221, 0.45);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .article-container {
+                padding: 1.75rem;
+                margin: 1.5rem 1rem;
+            }
+            .article-container h1 {
+                font-size: 1.85rem;
+            }
+            .gen-card {
+                padding: 1.25rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -28,7 +295,7 @@
             <div>
                 <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;">
                     <img src="/logo.png" alt="Street View Date Finder Logo" style="width: 32px; height: 32px; border-radius: 4px;">
-                    <h1 style="margin: 0; font-size: 1.2rem;">Street View Date Finder</h1>
+                    <h1 style="margin: 0; font-size: 1.2rem; -webkit-text-fill-color: initial; background: none;">Street View Date Finder</h1>
                 </a>
             </div>
             <nav>
@@ -42,42 +309,121 @@
         </div>
     </header>
 
-    <div class="article-container">
-        <h1>The Evolution of Google Maps Street View Cameras: Gen 1 to Gen 4</h1>
-        <div class="article-meta">
-            <span>Published: March 2026</span>
-            <span>Category: Tech & History</span>
+    <main class="article-container">
+        <div class="article-breadcrumbs">
+            <a href="/blog/">Blog</a> <span>/</span> <span>Camera History</span>
         </div>
 
-        <p>When Google launched Street View in 2007, the idea of mapping the entire world in 360-degree panoramic photos seemed like science fiction. Today, it is an essential part of daily navigation, OSINT research, and competitive GeoGuessr gameplay.</p>
+        <h1>The Evolution of Google Maps Street View Cameras: Gen 1 to Gen 4</h1>
         
-        <p>But the cameras strapped to the roofs of those iconic Google cars haven't stayed the same. Over the past two decades, they have undergone massive technical overhauls. Here is how you can identify which generation of camera snapped the image you are looking at.</p>
+        <div class="article-meta">
+            <div class="meta-tags">
+                <span class="tag-pill">Tech & History</span>
+                <span class="tag-pill">GeoGuessr</span>
+                <span>• 5 min read</span>
+            </div>
+            <span>Published: March 2026</span>
+        </div>
 
-        <h2>Generation 1 (2007 – 2008): The Blurry Beginnings</h2>
-        <p>If you drop into a Street View image and it looks like it was photographed through a dirty fishbowl, you are looking at Gen 1 imagery. These early cameras used extremely low-resolution sensors. The images are highly compressed, lack dynamic range (the skies are often completely blown out and white), and the stitching between the different lenses is frequently misaligned.</p>
-        <p><em>Pro Tip for GeoGuessr:</em> Gen 1 coverage is relatively rare today and is mostly restricted to the United States, Australia, and parts of New Zealand.</p>
-
-        <h2>Generation 2 (2008 – 2009): The "Halo" Era</h2>
-        <p>Gen 2 cameras brought a much-needed bump in resolution and better color balance. However, they are most famous for a distinct visual artifact: the "halo." If you look straight down or up at the sun in a Gen 2 panorama, you will often see a circular, chromatic aberration or blur ring.</p>
-        <p>While a massive improvement over Gen 1, these cameras still struggled in low-light environments and heavy shadows.</p>
-
-        <h2>Generation 3 (2009 – 2017): The Global Standard</h2>
-        <p>Generation 3 changed everything. This rig featured a massive 15-lens rosette system capable of capturing 75-megapixel panoramas. The skies became beautifully blue, the stitching became nearly seamless, and the overall clarity allowed users to read street signs from down the block.</p>
-        <p>Because Gen 3 was deployed during Google's most aggressive global expansion phase, it remains the most common camera generation you will encounter when exploring rural areas in Europe, South America, and Asia.</p>
-
-        <h2>Generation 4 (2017 – Present): The HD Revolution</h2>
-        <p>In 2017, Google rolled out the Gen 4 system. It abandoned the 15-lens rosette for a sleeker, owl-like design featuring 7 high-definition, 20-megapixel cameras (totaling 140 megapixels). The color grading is incredibly vibrant, and the low-light performance is staggering.</p>
-        <p>Gen 4 cars are also equipped with dual LiDAR scanners to capture hyper-accurate 3D depth data, making the panoramas load and transition much smoother.</p>
-
-        <h2>Why Camera Generations Matter</h2>
-        <p>For researchers and players, recognizing the camera generation is a cheat code for estimating the capture year. If you see Gen 4 imagery, you instantly know the photo was taken no earlier than 2017.</p>
-        <p>However, camera generations only give you a broad multi-year window. When you need absolute precision, you have to look past the pixels and into the metadata.</p>
+        <p class="intro-lead">When Google launched Street View in 2007, the idea of mapping the entire world in 360-degree panoramic photos seemed like science fiction. Today, it is an essential foundation of daily navigation, OSINT investigations, and competitive GeoGuessr play.</p>
         
+        <p>The cameras strapped to the roofs of those iconic Google cars haven't stayed static. Over the past two decades, they have undergone four distinct generational overhauls. Here is how you can instantly identify which generation captured the imagery in front of you.</p>
+
+        <!-- Generation 1 -->
+        <section class="gen-card">
+            <div class="gen-header">
+                <h2><span class="gen-badge">GEN 1</span> The Blurry Beginnings</h2>
+                <span class="gen-years">Active: 2007 – 2008</span>
+            </div>
+            <p>If you drop into a panorama that looks like it was captured through a dirty fishbowl, you are looking at Gen 1 imagery. These early setups used low-resolution, commercial-grade sensors. Imagery suffers from heavy compression artifacts, blown-out white skies lacking dynamic range, and severe stitching tears across seams.</p>
+            
+            <div class="pro-tip">
+                <div class="pro-tip-icon">💡</div>
+                <p><strong>GeoGuessr Meta:</strong> Gen 1 coverage is extremely scarce today. It is almost exclusively confined to legacy highways in the United States, Australia, and select parts of New Zealand.</p>
+            </div>
+        </section>
+
+        <!-- Generation 2 -->
+        <section class="gen-card">
+            <div class="gen-header">
+                <h2><span class="gen-badge">GEN 2</span> The "Halo" Era</h2>
+                <span class="gen-years">Active: 2008 – 2009</span>
+            </div>
+            <p>Gen 2 cameras provided a noticeable bump in resolution and overall color fidelity, but introduced their own trademark artifact: the <strong>"halo effect."</strong> Looking directly down at the car blur or upwards toward the sun reveals a distinct circular ring of chromatic blur and purple fringing.</p>
+            <p style="margin-bottom: 0;">While a clear step up from Gen 1, these rigs still crushed deep shadows and suffered under direct overhead sunlight.</p>
+        </section>
+
+        <!-- Generation 3 -->
+        <section class="gen-card">
+            <div class="gen-header">
+                <h2><span class="gen-badge">GEN 3</span> The Global Standard</h2>
+                <span class="gen-years">Active: 2009 – 2017</span>
+            </div>
+            <p>Generation 3 set the visual benchmark for modern street imagery. Google engineered a massive <strong>15-lens rosette assembly</strong> producing 75-megapixel panoramas. Skies shifted from blown-out whites to crisp blues, stitching seams became virtually invisible, and street signs became readable from across intersections.</p>
+            <p style="margin-bottom: 0;">Because Gen 3 coincided with Google's most aggressive worldwide mapping expansion, it remains the predominant coverage encountered across rural Europe, South America, and Southeast Asia.</p>
+        </section>
+
+        <!-- Generation 4 -->
+        <section class="gen-card">
+            <div class="gen-header">
+                <h2><span class="gen-badge">GEN 4</span> The HD Revolution</h2>
+                <span class="gen-years">Active: 2017 – Present</span>
+            </div>
+            <p>In 2017, Google retired the bulky 15-lens rosette in favor of a sleek, owl-like housing containing 7 high-definition 20-megapixel cameras (totaling 140 megapixels). Color reproduction is rich, dynamic range handles harsh shadows effortlessly, and low-light clarity is exceptional.</p>
+            <p style="margin-bottom: 0;">Gen 4 vehicles are also integrated with dual <strong>Velodyne LiDAR scanners</strong> to calculate precise 3D surface geometry, creating smoother perspective transitions between steps.</p>
+        </section>
+
+        <!-- Quick Comparison Reference -->
+        <h2 style="color: var(--text-primary); margin-top: 3rem; font-size: 1.45rem;">Quick Identification Matrix</h2>
+        <div class="specs-table-container">
+            <table class="specs-table">
+                <thead>
+                    <tr>
+                        <th>Generation</th>
+                        <th>Years Active</th>
+                        <th>Resolution & Rig</th>
+                        <th>Telltale Signature</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong style="color: var(--text-primary);">Gen 1</strong></td>
+                        <td>2007 – 2008</td>
+                        <td>Low-res sensors</td>
+                        <td>Blown-out white skies, extreme compression, visible stitch tears</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color: var(--text-primary);">Gen 2</strong></td>
+                        <td>2008 – 2009</td>
+                        <td>Standard HD upgrade</td>
+                        <td>Circular "halo" ring around the sun and bottom nadir blur</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color: var(--text-primary);">Gen 3</strong></td>
+                        <td>2009 – 2017</td>
+                        <td>15-lens rosette (75 MP)</td>
+                        <td>Crisp skies, readable street signs, most common rural coverage</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color: var(--text-primary);">Gen 4</strong></td>
+                        <td>2017 – Present</td>
+                        <td>7 HD sensors (140 MP) + LiDAR</td>
+                        <td>Vibrant color grading, ultra-sharp details, smooth 3D transitions</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 style="color: var(--text-primary); margin-top: 2.5rem; font-size: 1.45rem;">Why Camera Generations Matter</h2>
+        <p>For geolocation specialists and OSINT investigators, identifying the camera rig provides an immediate ballpark date range. Spotting Gen 4 imagery confirms the capture cannot be older than 2017, while Gen 1 imagery dates the view to the late 2000s.</p>
+        <p>However, camera generations only provide multi-year windows. When an investigation or historical comparison requires exact timestamps, you need to query the metadata directly.</p>
+        
+        <!-- Upgraded Call to Action -->
         <div class="tool-promo">
             <h3>Find the Exact Time and Date</h3>
-            <p>Don't rely on camera generations alone. Our free tool uses binary search to extract the exact, second-by-second timestamp of any Street View panorama directly from Google's backend.</p>
-            <a href="/" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background: var(--accent-primary); color: white; border-radius: 6px; font-weight: bold;">Extract a Timestamp Now</a>
+            <p>Don't rely on camera guesswork alone. Our tool inspects Google's backend API to pull the exact second-by-second capture timestamp for any panorama.</p>
+            <a href="/" class="promo-btn">Extract a Timestamp Now →</a>
         </div>
-    </div>
+    </main>
 </body>
 </html>

@@ -7,13 +7,170 @@
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .legal-container { max-width: 800px; margin: 4rem auto; background: var(--bg-card); padding: 2.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        .legal-container h1 { color: var(--accent-primary); margin-top: 0; margin-bottom: 0.5rem; font-size: 2.2rem; }
-        .legal-container .last-updated { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; }
-        .legal-container h2 { color: var(--text-primary); margin-top: 2rem; font-size: 1.3rem; }
-        .legal-container p, .legal-container li { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.7; }
-        .legal-container a { color: var(--accent-primary); text-decoration: none; }
-        .legal-container a:hover { text-decoration: underline; }
+        :root {
+            --bg-page: #0d0e15;
+            --bg-card: #151622;
+            --bg-card-subtle: #1c1d2e;
+            --accent-primary: #9d4edd;
+            --accent-glow: rgba(157, 78, 221, 0.25);
+            --accent-secondary: #7b2cbf;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a3bd;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(157, 78, 221, 0.35);
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .legal-container { 
+            max-width: 820px; 
+            margin: 3.5rem auto; 
+            background: var(--bg-card); 
+            padding: 3rem; 
+            border-radius: 16px; 
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        .breadcrumbs {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .breadcrumbs a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .breadcrumbs a:hover {
+            color: var(--accent-primary);
+        }
+
+        .legal-container h1 { 
+            color: var(--text-primary); 
+            margin: 0 0 0.75rem 0; 
+            font-size: 2.35rem; 
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .legal-meta { 
+            color: var(--text-secondary); 
+            font-size: 0.9rem; 
+            margin-bottom: 2.5rem; 
+            border-bottom: 1px solid var(--border-subtle); 
+            padding-bottom: 1.2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+
+        .legal-card {
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.6rem 1.85rem;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .legal-card:hover {
+            border-color: var(--border-accent);
+        }
+
+        .legal-card h2 { 
+            color: var(--text-primary); 
+            margin: 0 0 0.75rem 0; 
+            font-size: 1.25rem; 
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legal-card p, .legal-card li { 
+            color: var(--text-secondary); 
+            margin-bottom: 0.85rem; 
+            line-height: 1.75; 
+            font-size: 0.98rem; 
+        }
+
+        .legal-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .legal-card a { 
+            color: var(--accent-primary); 
+            text-decoration: none; 
+            font-weight: 600;
+        }
+
+        .legal-card a:hover { 
+            text-decoration: underline; 
+        }
+
+        .site-footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 3rem 1.5rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-container p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0 0 0.35rem 0;
+        }
+
+        .disclaimer {
+            font-size: 0.8rem !important;
+            color: #6f728c !important;
+        }
+
+        .footer-links {
+            margin-top: 1.25rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 0.85rem;
+        }
+
+        .footer-links a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #b366f9;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .legal-container {
+                padding: 1.75rem;
+                margin: 1.5rem 1rem;
+            }
+            .legal-container h1 {
+                font-size: 1.85rem;
+            }
+            .legal-card {
+                padding: 1.25rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -36,27 +193,59 @@
         </div>
     </header>
 
-    <div class="legal-container">
+    <main class="legal-container">
+        <div class="breadcrumbs">
+            <a href="/">Home</a> <span>/</span> <span>Legal</span>
+        </div>
+
         <h1>Terms of Service</h1>
-        <p class="last-updated">Last updated: February 2026</p>
+        <div class="legal-meta">
+            <span>Last updated: February 2026</span>
+            <span>Street View Date Finder</span>
+        </div>
 
-        <h2>1. Acceptance of Terms</h2>
-        <p>By accessing and using the Street View Date Finder website, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by these terms, please do not use this service.</p>
+        <section class="legal-card">
+            <h2>1. Acceptance of Terms</h2>
+            <p>Accessing or navigating Street View Date Finder indicates your consent to adhere to these usage conditions. If you disagree with these provisions, you should refrain from using the platform.</p>
+        </section>
 
-        <h2>2. Description of Service</h2>
-        <p>Street View Date Finder provides a free, browser-based tool that extracts timestamps from publicly available Google Maps URLs. We are not affiliated with, endorsed by, or sponsored by Google LLC. The tool is provided strictly for educational, historical, and research purposes.</p>
+        <section class="legal-card">
+            <h2>2. Scope of Service</h2>
+            <p>Street View Date Finder provides a no-cost, client-side utility designed to parse timestamps from accessible Google Maps links. This service operates independently without sponsorship, affiliation, or endorsement from Google LLC. The utility is intended solely for investigative, academic, and historical reference.</p>
+        </section>
 
-        <h2>3. User Conduct</h2>
-        <p>You agree to use this tool responsibly and legally. You agree not to use the tool to facilitate any malicious activity, harassment, stalking, or any action that violates the privacy or rights of others. We reserve the right to restrict or terminate access to the tool if we suspect abuse.</p>
+        <section class="legal-card">
+            <h2>3. Permitted Conduct</h2>
+            <p>Users must employ this tool strictly in compliance with applicable laws. Any utilization involving harassment, illicit surveillance, stalking, or infringing upon the privacy rights of individuals is strictly prohibited. We retain full authority to suspend or revoke access whenever unauthorized or harmful usage is detected.</p>
+        </section>
 
-        <h2>4. Disclaimer of Warranties</h2>
-        <p>This tool relies on undocumented, public-facing APIs from third parties (Google). Therefore, the service is provided on an "as is" and "as available" basis. We make no guarantees that the tool will always be accurate, available, uninterrupted, or error-free. The ability to extract exact timestamps may be restricted or removed at any time if third-party systems change.</p>
+        <section class="legal-card">
+            <h2>4. Service Disclaimers</h2>
+            <p>Because operations depend upon external, undocumented endpoints managed by Google, this platform is delivered strictly on an "as is" and "as available" basis without performance guarantees. We cannot assure uninterrupted uptime or perpetual error-free extraction, and operational features may degrade or cease functioning if remote third-party systems are updated.</p>
+        </section>
 
-        <h2>5. Limitation of Liability</h2>
-        <p>In no event shall Street View Date Finder, nor its developers, be liable for any indirect, incidental, special, consequential, or punitive damages arising out of your access to or use of the service. You use the information extracted by this tool at your own risk.</p>
+        <section class="legal-card">
+            <h2>5. Limitation of Liability</h2>
+            <p>Street View Date Finder and its authors assume no liability for incidental, punitive, or consequential damages resulting from platform access or the application of parsed data. Reliance on retrieved output occurs solely at your own discretion and risk.</p>
+        </section>
 
-        <h2>6. Contact Us</h2>
-        <p>If you have any questions about these Terms of Service, please contact us at: <a href="mailto:email@gmail.com">email@gmail.com</a></p>
-    </div>
+        <section class="legal-card">
+            <h2>6. Inquiries</h2>
+            <p>For questions or clarifications regarding these terms, contact our team at: <a href="mailto:email@gmail.com">email@gmail.com</a>.</p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <p>&copy; 2026 Pano Date Extractor. All rights reserved.</p>
+            <p class="disclaimer">Not affiliated with Google LLC. This tool is for educational and research purposes.</p>
+            
+            <div class="footer-links">
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+                <a href="mailto:email@gmail.com">Contact Us</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

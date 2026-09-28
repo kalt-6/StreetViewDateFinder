@@ -14,6 +14,11 @@
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="css/style.css">
 
+    <!-- Custom Font for Tool Actions -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
     <meta property="og:site_name" content="Street View Date Finder">
     <script type="application/ld+json">
     {
@@ -23,6 +28,421 @@
       "url": "https://streetviewdate.com/"
     }
     </script>
+
+    <style>
+        :root {
+            --bg-page: #0d0e15;
+            --bg-card: #151622;
+            --bg-card-subtle: #1c1d2e;
+            --accent-primary: #9d4edd;
+            --accent-glow: rgba(157, 78, 221, 0.35);
+            --accent-secondary: #7b2cbf;
+            --accent-error: #f87171;
+            --accent-error-bg: rgba(239, 68, 68, 0.08);
+            --accent-error-border: rgba(239, 68, 68, 0.25);
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a3bd;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(157, 78, 221, 0.35);
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content-wrapper {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Hero / Tool Section */
+        .hero-section {
+            padding: 5rem 1.5rem 4rem 1.5rem;
+            text-align: center;
+            background: radial-gradient(circle at 50% 15%, rgba(157, 78, 221, 0.12) 0%, transparent 60%);
+        }
+
+        .hero-text h2 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin: 0 0 1rem 0;
+            color: var(--text-primary);
+        }
+
+        .hero-text .hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 640px;
+            margin: 0 auto 1.5rem auto;
+            line-height: 1.7;
+        }
+
+        /* Red Disclaimer Banner */
+        .disclaimer-box {
+            background: var(--accent-error-bg);
+            border: 1px solid var(--accent-error-border);
+            border-left: 3px solid var(--accent-error);
+            border-radius: 0 10px 10px 0;
+            padding: 1rem 1.25rem;
+            max-width: 760px;
+            margin: 0 auto 2.5rem auto;
+            text-align: left;
+        }
+
+        .disclaimer-box p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--accent-error);
+            line-height: 1.65;
+        }
+
+        /* Clean Tool Console */
+        .tool-console {
+            max-width: 760px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, #181928 0%, #12131f 100%);
+            border: 1px solid rgba(157, 78, 221, 0.28);
+            border-radius: 18px;
+            padding: 1.75rem 2rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(157, 78, 221, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            background: rgba(7, 8, 14, 0.85);
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .input-group:focus-within {
+            border-color: var(--accent-primary);
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6), 0 0 18px var(--accent-glow);
+        }
+
+        #urlInput {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 16px;
+            color: #ffffff;
+            font-size: 0.98rem;
+            outline: none;
+            width: 100%;
+        }
+
+        #urlInput::placeholder {
+            color: #5c607a;
+        }
+
+        /* Extract Time Button with Space Grotesk */
+        #runBtn {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            position: relative;
+            background: linear-gradient(135deg, #a855f7 0%, #7e22ce 55%, #581c87 100%);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            padding: 13px 28px;
+            border-radius: 10px;
+            font-size: 0.96rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            white-space: nowrap;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 6px 20px rgba(157, 78, 221, 0.38);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #runBtn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #b76bf9 0%, #8b28df 55%, #6b21a8 100%);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.55), 0 8px 26px rgba(157, 78, 221, 0.55);
+        }
+
+        #runBtn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35), 0 3px 10px rgba(157, 78, 221, 0.3);
+        }
+
+        /* Terminal & Results */
+        .terminal {
+            margin-top: 1.5rem;
+            background: #09090f;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.85rem;
+            color: #22c55e;
+            text-align: left;
+            overflow-x: auto;
+        }
+
+        #result {
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+
+        /* Content Sections */
+        .section-container {
+            padding: 4.5rem 0;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .section-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.9rem;
+            color: var(--text-primary);
+            margin: 0 0 0.5rem 0;
+            font-weight: 700;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* How It Works Pipeline */
+        .tech-pipeline {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-top: 2rem;
+        }
+
+        .pipeline-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .pipeline-card .step-num {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .pipeline-card strong {
+            color: var(--text-primary);
+            font-size: 1.05rem;
+        }
+
+        .pipeline-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Step Cards */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+
+        .step-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.75rem;
+            display: flex;
+            gap: 1rem;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .step-card:hover {
+            border-color: var(--border-accent);
+            transform: translateY(-2px);
+        }
+
+        .step-index {
+            background: rgba(157, 78, 221, 0.15);
+            border: 1px solid var(--border-accent);
+            color: var(--accent-primary);
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .step-content strong {
+            display: block;
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Use Cases Cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.75rem 1.5rem;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-accent);
+        }
+
+        .feature-card .card-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .feature-card h3 {
+            color: var(--text-primary);
+            font-size: 1.15rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* FAQ */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.5rem 1.75rem;
+        }
+
+        .faq-item h3 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 600;
+        }
+
+        .faq-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        /* Footer */
+        .site-footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .footer-container p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0 0 0.35rem 0;
+        }
+
+        .disclaimer {
+            font-size: 0.8rem !important;
+            color: #6f728c !important;
+        }
+
+        .footer-links {
+            margin-top: 1.25rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 0.85rem;
+        }
+
+        .footer-links a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #b366f9;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .hero-text h2 {
+                font-size: 2.05rem;
+            }
+            .tool-console {
+                padding: 1.25rem;
+            }
+            .input-group {
+                flex-direction: column;
+                background: transparent;
+                border: none;
+                padding: 0;
+                box-shadow: none;
+                gap: 10px;
+            }
+            #urlInput {
+                background: rgba(7, 8, 14, 0.9);
+                border: 1px solid var(--border-subtle);
+                border-radius: 10px;
+                padding: 14px 16px;
+            }
+            #runBtn {
+                width: 100%;
+                padding: 14px;
+            }
+            .tech-pipeline,
+            .steps-grid,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -30,7 +450,7 @@
         <div class="header-container">
             <div style="display: flex; align-items: center; gap: 12px;">
                 <img src="logo.png" alt="Street View Date Finder Logo" style="width: 32px; height: 32px; border-radius: 4px;">
-                <h1 style="margin: 0;">Street View Date Finder</h1>
+                <h1 style="margin: 0; font-size: 1.2rem;">Street View Date Finder</h1>
             </div>
             <nav>
                 <a href="/">The Tool</a>
@@ -43,61 +463,126 @@
         </div>
     </header>
 
+    <!-- Tool Section -->
     <section id="tool" class="hero-section">
-        <div class="hero-text">
-            <h2>Find the Exact Date of a Street View Image</h2>
-            <p style="margin-bottom: 0.5rem;">Paste any Google Maps Street View URL below to extract the exact local time the image was captured, down to the precise second.</p>
-            <p style="font-size: 0.9rem; color: var(--accent-error); margin-top: 0; margin-bottom: 3rem;">
-                <em>Note: Finding exact timestamps for panoramas taken prior to 2025 can be a bit finicky. If the tool fails to find the exact date of an older panorama, you can try moving one step down the road and trying the new link. I have gotten images as old as 2008 to work with a bit of effort.</em>
-            </p>
-        </div>
-        
-        <div class="main-container">
-            <div class="input-group">
-                <input type="text" id="urlInput" placeholder="Paste Street View URL or 22-character Pano ID here..." autocomplete="off">
-                <button id="runBtn">Extract Time</button>
+        <div class="content-wrapper">
+            <div class="hero-text">
+                <h2>Find the Exact Date of a Street View Image</h2>
+                <p class="hero-subtitle">Paste any Google Maps Street View URL below to extract the exact local time the image was captured, down to the precise second.</p>
+                
+                <div class="disclaimer-box">
+                    <p><em>Note: Finding exact timestamps for panoramas taken prior to 2025 can be a bit finicky. If the tool fails to find the exact date of an older panorama, you can try moving one step down the road and trying the new link. I have gotten images as old as 2008 to work with a bit of effort.</em></p>
+                </div>
             </div>
             
-            <div id="logs" class="terminal" style="display: none;"></div>
-            <div id="result"></div>
-        </div>
-    </section>
-
-    <section id="how-it-works" class="info-section">
-        <div class="info-container">
-            <h2>How Does It Work?</h2>
-            <p>Google Maps publicly displays the capture month and year for its panoramas, but the precise time of day is hidden deep within their backend systems. This application interacts directly with the hidden Google Maps API using a binary search algorithm.</p>
-            <p>By repeatedly pinging the database with narrowing timestamp filters, the tool pinpoints the exact UNIX timestamp when the Google Street View car snapped the photograph. It then converts this raw data into the accurate local time of the location, while also automatically adjusting for Daylight Saving Time (DST) rules where applicable.</p>
-        </div>
-    </section>
-
-    <section id="guide" class="features-section">
-        <div class="features-container">
-            <h2>How to Use the Tool</h2>
-            <div style="color: var(--text-secondary); font-size: 1.05rem;">
-                <ol style="line-height: 1.8; padding-left: 20px;">
-                    <li><strong>Find your image:</strong> Open Google Maps on a desktop browser and drop the pegman onto the street to enter Street View.</li>
-                    <li><strong>Copy the link:</strong> Navigate to the exact frame you want to analyze, then copy the massive URL directly from your browser's address bar. <em>(Avoid using shortened mobile sharing links like goo.gl, as they block data extraction).</em></li>
-                    <li><strong>Extract the time:</strong> Paste the full URL into the input box at the top of this page and click the "Extract Time" button.</li>
-                    <li><strong>Analyze the data:</strong> Within seconds, the tool will reveal the exact local time the image was taken in its original time zone, alongside a conversion to your current local time.</li>
-                </ol>
+            <div class="tool-console main-container">
+                <div class="input-group">
+                    <input type="text" id="urlInput" placeholder="Paste Street View URL or 22-character Pano ID here..." autocomplete="off">
+                    <button id="runBtn">Extract Time</button>
+                </div>
+                
+                <div id="logs" class="terminal" style="display: none;"></div>
+                <div id="result"></div>
             </div>
         </div>
     </section>
 
-    <section id="use-cases" class="info-section"> 
-        <div class="info-container">
-            <h2>Who is this for?</h2>
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="section-container">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <h2>How Does It Work?</h2>
+                <p>Google Maps publicly displays the capture month and year for its panoramas, but the precise time of day is hidden deep within their backend systems. This application interacts directly with the hidden Google Maps API using a binary search algorithm.</p>
+                <p style="margin-top: 0.75rem;">By repeatedly pinging the database with narrowing timestamp filters, the tool pinpoints the exact UNIX timestamp when the Google Street View car snapped the photograph. It then converts this raw data into the accurate local time of the location, while also automatically adjusting for Daylight Saving Time (DST) rules where applicable.</p>
+            </div>
+
+            <div class="tech-pipeline">
+                <div class="pipeline-card">
+                    <span class="step-num">Step 01</span>
+                    <strong>Pano ID Resolution</strong>
+                    <p>Parses the 22-character unique panorama identifier directly from your full Google Maps URL.</p>
+                </div>
+                <div class="pipeline-card">
+                    <span class="step-num">Step 02</span>
+                    <strong>Binary Search Pings</strong>
+                    <p>Repeatedly pings the database with narrowing timestamp filters to pinpoint the exact UNIX timestamp when the photograph was snapped.</p>
+                </div>
+                <div class="pipeline-card">
+                    <span class="step-num">Step 03</span>
+                    <strong>DST & Local Conversion</strong>
+                    <p>Converts raw data into accurate local time while automatically adjusting for Daylight Saving Time (DST) rules where applicable.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Guide Section -->
+    <section id="guide" class="section-container">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <h2>How to Use the Tool</h2>
+                <p>Follow these four simple steps to extract your panorama metadata:</p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-index">01</div>
+                    <div class="step-content">
+                        <strong>Find your image</strong>
+                        <p>Open Google Maps on a desktop browser and drop the pegman onto the street to enter Street View.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-index">02</div>
+                    <div class="step-content">
+                        <strong>Copy the link</strong>
+                        <p>Navigate to the exact frame you want to analyze, then copy the massive URL directly from your browser's address bar. <em>(Avoid using shortened mobile sharing links like goo.gl, as they block data extraction).</em></p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-index">03</div>
+                    <div class="step-content">
+                        <strong>Extract the time</strong>
+                        <p>Paste the full URL into the input box at the top of this page and click the "Extract Time" button.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-index">04</div>
+                    <div class="step-content">
+                        <strong>Analyze the data</strong>
+                        <p>Within seconds, the tool will reveal the exact local time the image was taken in its original time zone, alongside a conversion to your current local time.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section id="use-cases" class="section-container"> 
+        <div class="content-wrapper">
+            <div class="section-header">
+                <h2>Who is this for?</h2>
+                <p>Precision timestamps unlock critical advantages across investigative, competitive, and academic fields:</p>
+            </div>
+
             <div class="feature-grid">
                 <div class="feature-card">
+                    <div class="card-icon">🛰️</div>
                     <h3>OSINT Researchers</h3>
                     <p>Verify the exact timeline of events, cross-reference shadows and weather conditions, and establish chronological facts in open-source intelligence investigations.</p>
                 </div>
+
                 <div class="feature-card">
+                    <div class="card-icon">🌍</div>
                     <h3>GeoGuessr Players</h3>
                     <p>Study historical capture times to better understand sun angles, shadow lengths, and camera generations across different countries and regions.</p>
                 </div>
+
                 <div class="feature-card">
+                    <div class="card-icon">🏛️</div>
                     <h3>Historians & Archivists</h3>
                     <p>Accurately catalog and date archival street-level imagery for urban development studies and historical documentation.</p>
                 </div>
@@ -105,36 +590,43 @@
         </div>
     </section>
 
-    <section id="faq" class="features-section">
-        <div class="features-container">
-            <h2>Frequently Asked Questions</h2>
+    <!-- FAQ Section -->
+    <section id="faq" class="section-container">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Common questions regarding extraction limits, URL types, and platform features.</p>
+            </div>
             
-            <div style="margin-bottom: 1.5rem;">
-                <h3 style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: 0.5rem;">Why didn't it find the exact time for my older image?</h3>
-                <p style="color: var(--text-secondary); margin-top: 0;">While recent images are easily extracted, older panoramas can sometimes hit a ceiling limit in Google's database architecture. As mentioned above, if you get an error for an older image, try moving one step down the street in Google Maps and extracting the time from the new URL. It takes a bit of trial and error, but it often works!</p>
-            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3>Why didn't it find the exact time for my older image?</h3>
+                    <p>While recent images are easily extracted, older panoramas can sometimes hit a ceiling limit in Google's database architecture. As mentioned above, if you get an error for an older image, try moving one step down the street in Google Maps and extracting the time from the new URL. It takes a bit of trial and error, but it often works!</p>
+                </div>
 
-            <div style="margin-bottom: 1.5rem;">
-                <h3 style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: 0.5rem;">Why do mobile links fail?</h3>
-                <p style="color: var(--text-secondary); margin-top: 0;">Shortened sharing links generated by the Google Maps mobile app act as redirects. Google aggressively blocks automated tools from following these redirects to prevent bot abuse. You must use the fully expanded, long URL found in a standard desktop web browser.</p>
-            </div>
+                <div class="faq-item">
+                    <h3>Why do mobile links fail?</h3>
+                    <p>Shortened sharing links generated by the Google Maps mobile app act as redirects. Google aggressively blocks automated tools from following these redirects to prevent bot abuse. You must use the fully expanded, long URL found in a standard desktop web browser.</p>
+                </div>
 
-            <div style="margin-bottom: 1.5rem;">
-                <h3 style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: 0.5rem;">Is this tool free to use?</h3>
-                <p style="color: var(--text-secondary); margin-top: 0;">Yes. The Street View Date Finder is 100% free and runs directly in your browser. No accounts or API keys are required to extract timestamps.</p>
+                <div class="faq-item">
+                    <h3>Is this tool free to use?</h3>
+                    <p>Yes. The Street View Date Finder is 100% free and runs directly in your browser. No accounts or API keys are required to extract timestamps.</p>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="site-footer">
-        <div class="footer-container">
+        <div class="content-wrapper footer-container">
             <p>&copy; 2026 Pano Date Extractor. All rights reserved.</p>
             <p class="disclaimer">Not affiliated with Google LLC. This tool is for educational and research purposes.</p>
             
-            <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 15px; font-size: 0.8rem;">
-                <a href="/privacy" style="color: var(--accent-primary); text-decoration: none;">Privacy Policy</a>
-                <a href="/terms" style="color: var(--accent-primary); text-decoration: none;">Terms of Service</a>
-                <a href="mailto:email@gmail.com" style="color: var(--accent-primary); text-decoration: none;">Contact Us</a>
+            <div class="footer-links">
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+                <a href="mailto:email@gmail.com">Contact Us</a>
             </div>
         </div>
     </footer>
@@ -142,8 +634,3 @@
     <script type="module" src="js/app.js"></script>
 </body>
 </html>
-
-
-
-
-

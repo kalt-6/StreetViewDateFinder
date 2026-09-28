@@ -39,7 +39,6 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
         }
 
-        /* Typography & Header */
         .article-breadcrumbs {
             font-size: 0.85rem;
             color: var(--text-secondary);
@@ -114,7 +113,6 @@
             line-height: 1.75;
         }
 
-        /* Strategy & Technique Cards */
         .strategy-card {
             background: var(--bg-card-subtle);
             border: 1px solid var(--border-subtle);
@@ -164,7 +162,6 @@
             font-weight: 500;
         }
 
-        /* Split Comparison Grids */
         .comparison-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -209,7 +206,6 @@
             color: var(--text-secondary);
         }
 
-        /* Pro Tip Callout */
         .pro-tip {
             display: flex;
             align-items: flex-start;
@@ -234,7 +230,6 @@
             line-height: 1.6;
         }
 
-        /* Matrix Reference Table */
         .specs-table-container {
             overflow-x: auto;
             margin: 2.5rem 0;
@@ -272,7 +267,6 @@
             background: rgba(255, 255, 255, 0.02);
         }
 
-        /* Promo CTA Card */
         .article-container .tool-promo { 
             position: relative;
             background: radial-gradient(circle at top right, rgba(157, 78, 221, 0.18), transparent 70%), 
@@ -373,7 +367,7 @@
 
         <p class="intro-lead">In competitive GeoGuessr, players are dropped into a random Google Street View panorama somewhere on Earth and tasked with identifying their precise coordinates. While beginners search for road markers, scripts, and landmarks, top players analyze something far more consistent: <strong>the shadows</strong>.</p>
         
-        <p>By assessing the direction, length, and angle of shadows cast by cars, utility poles, and tree canopies, elite players extract rich geographic and temporal data. Here is how shadow analysis works in open-source geolocation[cite: 2].</p>
+        <p>By assessing the direction, length, and angle of shadows cast by cars, utility poles, and tree canopies, elite players extract rich geographic and temporal data. Here is how shadow analysis works in open-source geolocation.</p>
 
         <!-- Section 1 -->
         <section class="strategy-card">
@@ -381,7 +375,7 @@
                 <h2><span class="step-badge">STEP 01</span> The Hemisphere Check</h2>
                 <span class="strategy-category">Latitude Clue</span>
             </div>
-            <p>The most fundamental use of shadows is determining your hemisphere[cite: 2]. Because the sun tracks along the equator, its relative arc across the sky flips depending on whether you stand north or south of it[cite: 2].</p>
+            <p>The most fundamental use of shadows is determining your hemisphere. Because the sun tracks along the equator, its relative arc across the sky flips depending on whether you stand north or south of it.</p>
             
             <div class="comparison-grid">
                 <div class="comparison-box">
@@ -389,20 +383,20 @@
                         <strong>Northern Hemisphere</strong>
                         <span class="direction-tag">Shadow → North</span>
                     </div>
-                    <p>The sun sits primarily in the southern sky[cite: 2]. Consequently, ground shadows point toward true <strong>North</strong>[cite: 2].</p>
+                    <p>The sun sits primarily in the southern sky. Consequently, ground shadows point toward true <strong>North</strong>.</p>
                 </div>
                 <div class="comparison-box">
                     <div class="comparison-box-header">
                         <strong>Southern Hemisphere</strong>
                         <span class="direction-tag">Shadow → South</span>
                     </div>
-                    <p>The sun sits primarily in the northern sky[cite: 2]. Consequently, ground shadows point toward true <strong>South</strong>[cite: 2].</p>
+                    <p>The sun sits primarily in the northern sky. Consequently, ground shadows point toward true <strong>South</strong>.</p>
                 </div>
             </div>
 
             <div class="pro-tip">
                 <div class="pro-tip-icon">🧭</div>
-                <p><strong>Car Nadir Meta:</strong> Align the Google Maps compass to North and look down at the Street View car's own shadow[cite: 2]. If the car's shadow stretches north, you can instantly rule out southern nations like Australia, Argentina, and South Africa[cite: 2].</p>
+                <p><strong>Car Nadir Meta:</strong> Align the Google Maps compass to North and look down at the Street View car's own shadow. If the car's shadow stretches north, you can instantly rule out southern nations like Australia, Argentina, and South Africa.</p>
             </div>
         </section>
 
@@ -412,7 +406,7 @@
                 <h2><span class="step-badge">STEP 02</span> Estimating the Time of Day</h2>
                 <span class="strategy-category">Solar Angle Clue</span>
             </div>
-            <p>Once your hemisphere is established, shadow orientation reveals the local time of day[cite: 2]. Because the sun rises in the East and sets in the West, shadows move in the exact opposite direction[cite: 2].</p>
+            <p>Once your hemisphere is established, shadow orientation reveals the local time of day. Because the sun rises in the East and sets in the West, shadows move in the exact opposite direction.</p>
 
             <div class="comparison-grid">
                 <div class="comparison-box">
@@ -420,18 +414,18 @@
                         <strong>Morning Window</strong>
                         <span class="direction-tag">Sunrise – Noon</span>
                     </div>
-                    <p>The sun rises in the East, stretching long shadows toward the <strong>West</strong>[cite: 2].</p>
+                    <p>The sun rises in the East, stretching long shadows toward the <strong>West</strong>.</p>
                 </div>
                 <div class="comparison-box">
                     <div class="comparison-box-header">
                         <strong>Afternoon Window</strong>
                         <span class="direction-tag">Noon – Sunset</span>
                     </div>
-                    <p>The sun descends in the West, casting shadows toward the <strong>East</strong>[cite: 2].</p>
+                    <p>The sun descends in the West, casting shadows toward the <strong>East</strong>.</p>
                 </div>
             </div>
 
-            <p style="margin-bottom: 0;">This timing is vital when combined with coverage metas: if you know Google's camera cars only operated during morning schedules in a particular territory, seeing a prominent western shadow confirms you are in that specific region[cite: 2].</p>
+            <p style="margin-bottom: 0;">This timing is vital when combined with coverage metas: if you know Google's camera cars only operated during morning schedules in a particular territory, seeing a prominent western shadow confirms you are in that specific region.</p>
         </section>
 
         <!-- Section 3 -->
@@ -440,11 +434,11 @@
                 <h2><span class="step-badge">STEP 03</span> Seasonal Shadow Lengths</h2>
                 <span class="strategy-category">Temporal & Camera Meta</span>
             </div>
-            <p>Shadow length also indicates the capture season[cite: 2]. During winter months, the sun remains low across the horizon, casting elongated shadows throughout the day[cite: 2]. During summer, high solar noon casts short, compact shadows directly beneath objects[cite: 2].</p>
+            <p>Shadow length also indicates the capture season. During winter months, the sun remains low across the horizon, casting elongated shadows throughout the day. During summer, high solar noon casts short, compact shadows directly beneath objects.</p>
             
             <div class="pro-tip">
                 <div class="pro-tip-icon">🌲</div>
-                <p><strong>Foliage Correlation:</strong> Cross-reference shadow length with foliage[cite: 2]. Elongated shadows combined with leafless deciduous trees signal late autumn or winter, helping you narrow the capture month and identify the camera generation Google had deployed[cite: 2].</p>
+                <p><strong>Foliage Correlation:</strong> Cross-reference shadow length with foliage. Elongated shadows combined with leafless deciduous trees signal late autumn or winter, helping you narrow the capture month and identify the camera generation Google had deployed.</p>
             </div>
         </section>
 
@@ -463,45 +457,45 @@
                     <tr>
                         <td><strong style="color: var(--text-primary);">Points Due North</strong></td>
                         <td>Sun in Southern sky</td>
-                        <td>Northern Hemisphere (rules out Southern Hemisphere)[cite: 2]</td>
+                        <td>Northern Hemisphere (rules out Southern Hemisphere)</td>
                     </tr>
                     <tr>
                         <td><strong style="color: var(--text-primary);">Points Due South</strong></td>
                         <td>Sun in Northern sky</td>
-                        <td>Southern Hemisphere (rules out Northern Hemisphere)[cite: 2]</td>
+                        <td>Southern Hemisphere (rules out Northern Hemisphere)</td>
                     </tr>
                     <tr>
                         <td><strong style="color: var(--text-primary);">Stretches West</strong></td>
                         <td>Sun in Eastern sky</td>
-                        <td>Morning capture window (Sunrise to Solar Noon)[cite: 2]</td>
+                        <td>Morning capture window (Sunrise to Solar Noon)</td>
                     </tr>
                     <tr>
                         <td><strong style="color: var(--text-primary);">Stretches East</strong></td>
                         <td>Sun in Western sky</td>
-                        <td>Afternoon capture window (Solar Noon to Sunset)[cite: 2]</td>
+                        <td>Afternoon capture window (Solar Noon to Sunset)</td>
                     </tr>
                     <tr>
                         <td><strong style="color: var(--text-primary);">Elongated + Bare Trees</strong></td>
                         <td>Low solar angle</td>
-                        <td>Winter / late autumn capture window[cite: 2]</td>
+                        <td>Winter / late autumn capture window</td>
                     </tr>
                     <tr>
                         <td><strong style="color: var(--text-primary);">Short / Compact</strong></td>
                         <td>High solar elevation</td>
-                        <td>Summer / midday solar capture window[cite: 2]</td>
+                        <td>Summer / midday solar capture window</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
         <h2 style="color: var(--text-primary); margin-top: 2.5rem; font-size: 1.45rem;">The Ultimate Tool for Shadow Verification</h2>
-        <p>While visual shadow estimation is an essential competitive skill, confirming your hypotheses requires exact timestamp data[cite: 2]. Google Maps displays only a general month and year in the watermark, which cannot tell you the exact solar elevation[cite: 2].</p>
-        <p>Knowing the exact minute a panorama was shot provides the missing key for true solar calculations[cite: 2].</p>
+        <p>While visual shadow estimation is an essential competitive skill, confirming your hypotheses requires exact timestamp data. Google Maps displays only a general month and year in the watermark, which cannot tell you the exact solar elevation.</p>
+        <p>Knowing the exact minute a panorama was shot provides the missing key for true solar calculations.</p>
         
         <!-- Promo CTA Card -->
         <div class="tool-promo">
             <h3>Verify Your Shadow Estimates</h3>
-            <p>Don't rely on guesswork for solar angles[cite: 2]. Extract the exact, second-by-second capture timestamp of any Google Street View panorama directly from backend APIs[cite: 2].</p>
+            <p>Don't rely on guesswork for solar angles. Extract the exact, second-by-second capture timestamp of any Google Street View panorama directly from backend APIs.</p>
             <a href="/" class="promo-btn">Extract a Timestamp Now →</a>
         </div>
     </main>

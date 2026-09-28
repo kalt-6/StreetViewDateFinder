@@ -8,16 +8,330 @@
     <link rel="icon" type="image/png" href="/logo.png">
     <link rel="stylesheet" href="/css/style.css">
     <style>
-        .article-container { max-width: 800px; margin: 4rem auto; background: var(--bg-card); padding: 2.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        .article-container h1 { color: var(--accent-primary); margin-top: 0; margin-bottom: 0.5rem; font-size: 2.2rem; line-height: 1.2; }
-        .article-container .article-meta { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; display: flex; justify-content: space-between; }
-        .article-container h2 { color: var(--text-primary); margin-top: 2.5rem; font-size: 1.5rem; }
-        .article-container h3 { color: var(--text-primary); margin-top: 1.5rem; font-size: 1.2rem; }
-        .article-container p, .article-container li { color: var(--text-secondary); margin-bottom: 1.2rem; line-height: 1.8; font-size: 1.05rem; }
-        .article-container a { color: var(--accent-primary); text-decoration: none; }
-        .article-container a:hover { text-decoration: underline; }
-        .article-container .tool-promo { background: linear-gradient(145deg, rgba(138, 43, 226, 0.05), rgba(138, 43, 226, 0.15)); border: 1px solid var(--accent-primary); padding: 1.5rem; border-radius: 8px; margin-top: 3rem; text-align: center; }
-        .article-container .tool-promo h3 { margin-top: 0; color: var(--accent-primary); }
+        :root {
+            --bg-page: #0d0e15;
+            --bg-card: #151622;
+            --bg-card-subtle: #1c1d2e;
+            --accent-primary: #9d4edd;
+            --accent-glow: rgba(157, 78, 221, 0.25);
+            --accent-secondary: #7b2cbf;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a3bd;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(157, 78, 221, 0.35);
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .article-container { 
+            max-width: 820px; 
+            margin: 3.5rem auto; 
+            background: var(--bg-card); 
+            padding: 3rem; 
+            border-radius: 16px; 
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        /* Typography & Header */
+        .article-breadcrumbs {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .article-breadcrumbs a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .article-breadcrumbs a:hover {
+            color: var(--accent-primary);
+        }
+
+        .article-container h1 { 
+            color: var(--text-primary); 
+            margin-top: 0; 
+            margin-bottom: 1rem; 
+            font-size: 2.35rem; 
+            line-height: 1.25; 
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 40%, var(--accent-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .article-container .article-meta { 
+            color: var(--text-secondary); 
+            font-size: 0.9rem; 
+            margin-bottom: 2.5rem; 
+            border-bottom: 1px solid var(--border-subtle); 
+            padding-bottom: 1.2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .meta-tags {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .tag-pill {
+            background: rgba(157, 78, 221, 0.15);
+            color: var(--accent-primary);
+            border: 1px solid var(--border-accent);
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .article-container p, .article-container li { 
+            color: var(--text-secondary); 
+            margin-bottom: 1.35rem; 
+            line-height: 1.85; 
+            font-size: 1.05rem; 
+        }
+
+        .intro-lead {
+            font-size: 1.15rem !important;
+            color: #d1d4e6 !important;
+            line-height: 1.75;
+        }
+
+        /* Strategy & Technique Cards */
+        .strategy-card {
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.75rem 2rem;
+            margin: 2rem 0;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .strategy-card:hover {
+            border-color: var(--border-accent);
+        }
+
+        .strategy-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .strategy-header h2 {
+            margin: 0;
+            font-size: 1.35rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-badge {
+            background: var(--accent-secondary);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            letter-spacing: 0.05em;
+        }
+
+        .strategy-category {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Split Comparison Grids */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.25rem 0;
+        }
+
+        .comparison-box {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 1.15rem;
+        }
+
+        .comparison-box-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.6rem;
+        }
+
+        .comparison-box-header strong {
+            color: var(--text-primary);
+            font-size: 0.98rem;
+        }
+
+        .direction-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 4px;
+            background: rgba(157, 78, 221, 0.2);
+            color: var(--accent-primary);
+            border: 1px solid var(--border-accent);
+            text-transform: uppercase;
+        }
+
+        .comparison-box p {
+            margin: 0;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        /* Pro Tip Callout */
+        .pro-tip {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: rgba(157, 78, 221, 0.08);
+            border-left: 3px solid var(--accent-primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.25rem 0 0.5rem 0;
+        }
+
+        .pro-tip-icon {
+            font-size: 1.15rem;
+            line-height: 1.4;
+            flex-shrink: 0;
+        }
+
+        .pro-tip p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #cfd2e8;
+            line-height: 1.6;
+        }
+
+        /* Matrix Reference Table */
+        .specs-table-container {
+            overflow-x: auto;
+            margin: 2.5rem 0;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            text-align: left;
+            background: var(--bg-card-subtle);
+        }
+
+        .specs-table th {
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-primary);
+            font-weight: 600;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .specs-table td {
+            padding: 13px 16px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .specs-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .specs-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Promo CTA Card */
+        .article-container .tool-promo { 
+            position: relative;
+            background: radial-gradient(circle at top right, rgba(157, 78, 221, 0.18), transparent 70%), 
+                        linear-gradient(145deg, #171626, #12121d);
+            border: 1px solid var(--border-accent); 
+            padding: 2.25rem 2rem; 
+            border-radius: 14px; 
+            margin-top: 3.5rem; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .article-container .tool-promo h3 { 
+            margin-top: 0; 
+            color: #ffffff; 
+            font-size: 1.45rem;
+            letter-spacing: -0.01em;
+        }
+
+        .article-container .tool-promo p {
+            max-width: 580px;
+            margin: 0.75rem auto 1.5rem auto;
+            color: #b5b8d0;
+        }
+
+        .promo-btn {
+            display: inline-block; 
+            padding: 12px 26px; 
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); 
+            color: #ffffff; 
+            border-radius: 8px; 
+            font-weight: 700;
+            font-size: 0.98rem;
+            text-decoration: none;
+            box-shadow: 0 4px 18px var(--accent-glow);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .promo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(157, 78, 221, 0.45);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .article-container {
+                padding: 1.75rem;
+                margin: 1.5rem 1rem;
+            }
+            .article-container h1 {
+                font-size: 1.85rem;
+            }
+            .strategy-card {
+                padding: 1.25rem;
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -26,7 +340,7 @@
             <div>
                 <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;">
                     <img src="/logo.png" alt="Street View Date Finder Logo" style="width: 32px; height: 32px; border-radius: 4px;">
-                    <h1 style="margin: 0; font-size: 1.2rem;">Street View Date Finder</h1>
+                    <h1 style="margin: 0; font-size: 1.2rem; -webkit-text-fill-color: initial; background: none;">Street View Date Finder</h1>
                 </a>
             </div>
             <nav>
@@ -40,46 +354,156 @@
         </div>
     </header>
 
-    <div class="article-container">
-        <h1>How GeoGuessr Players Use Shadows to Pinpoint Exact Locations</h1>
-        <div class="article-meta">
-            <span>Published: March 2026</span>
-            <span>Category: GeoGuessr Strategy</span>
+    <main class="article-container">
+        <div class="article-breadcrumbs">
+            <a href="/blog/">Blog</a> <span>/</span> <span>GeoGuessr Strategy</span>
         </div>
 
-        <p>In the highly competitive world of GeoGuessr, players are dropped into a random Google Street View panorama somewhere on Earth and tasked with figuring out exactly where they are. While beginners look for road signs, languages, and recognizable landmarks, elite players look at something much more subtle: <strong>the shadows</strong>.</p>
+        <h1>How GeoGuessr Players Use Shadows to Pinpoint Exact Locations</h1>
         
-        <p>By analyzing the direction, length, and angle of shadows cast by cars, trees, and buildings, top-tier players can extract an incredible amount of geographical data. Here is a breakdown of how shadow analysis works in open-source geolocation.</p>
+        <div class="article-meta">
+            <div class="meta-tags">
+                <span class="tag-pill">GeoGuessr Strategy</span>
+                <span class="tag-pill">Solar & Shadows</span>
+                <span class="tag-pill">OSINT</span>
+                <span>• 5 min read</span>
+            </div>
+            <span>Published: March 2026</span>
+        </div>
 
-        <h2>1. The Hemisphere Check (North vs. South)</h2>
-        <p>The most fundamental use of shadows in GeoGuessr is determining which hemisphere you are in. Because the sun travels across the sky near the equator, its relative position changes depending on whether you are in the Northern or Southern Hemisphere.</p>
-        <ul>
-            <li><strong>Northern Hemisphere:</strong> The sun is generally in the southern half of the sky. Therefore, shadows will point <strong>North</strong>.</li>
-            <li><strong>Southern Hemisphere:</strong> The sun is generally in the northern half of the sky. Therefore, shadows will point <strong>South</strong>.</li>
-        </ul>
-        <p>Players use the built-in compass in Google Maps to check the shadow of the Google Street View car itself. If the car's shadow is pointing directly north, the player immediately knows to rule out countries like Australia, Argentina, and South Africa.</p>
-
-        <h2>2. Estimating the Time of Day (East vs. West)</h2>
-        <p>Once the hemisphere is established, shadows can be used to estimate the local time of day. Since the sun rises in the East and sets in the West, shadows move in the opposite direction.</p>
-        <ul>
-            <li><strong>Morning (Sunrise to Noon):</strong> The sun is in the East, so shadows will stretch toward the <strong>West</strong>.</li>
-            <li><strong>Afternoon (Noon to Sunset):</strong> The sun is in the West, so shadows will stretch toward the <strong>East</strong>.</li>
-        </ul>
-        <p>This is where historical metadata becomes crucial. If a player knows that a specific generation of the Google Street View camera was only driven during morning hours in a certain country, seeing a long western shadow can immediately narrow down the region.</p>
-
-        <h2>3. Seasonal Shadow Lengths</h2>
-        <p>The length of a shadow can even hint at the time of year the image was captured. During the winter months, the sun sits lower in the sky, casting long, stretched-out shadows regardless of the time of day. During the summer months, the sun is higher overhead, resulting in short, stubby shadows.</p>
-        <p>By cross-referencing the shadow length with the foliage (e.g., bare trees vs. full green leaves), players can confidently guess the month of capture, which helps them identify the specific camera generation Google was using at that time.</p>
-
-        <h2>The Ultimate Tool for Shadow Verification</h2>
-        <p>While estimating shadows by eye is a vital skill, verifying those estimates requires hard data. In the past, players could only rely on the generic "Month/Year" stamp provided in the corner of Google Maps.</p>
-        <p>Today, researchers and players need exact precision. Knowing the precise minute an image was taken completely changes how a shadow is interpreted.</p>
+        <p class="intro-lead">In competitive GeoGuessr, players are dropped into a random Google Street View panorama somewhere on Earth and tasked with identifying their precise coordinates. While beginners search for road markers, scripts, and landmarks, top players analyze something far more consistent: <strong>the shadows</strong>.</p>
         
+        <p>By assessing the direction, length, and angle of shadows cast by cars, utility poles, and tree canopies, elite players extract rich geographic and temporal data. Here is how shadow analysis works in open-source geolocation[cite: 2].</p>
+
+        <!-- Section 1 -->
+        <section class="strategy-card">
+            <div class="strategy-header">
+                <h2><span class="step-badge">STEP 01</span> The Hemisphere Check</h2>
+                <span class="strategy-category">Latitude Clue</span>
+            </div>
+            <p>The most fundamental use of shadows is determining your hemisphere[cite: 2]. Because the sun tracks along the equator, its relative arc across the sky flips depending on whether you stand north or south of it[cite: 2].</p>
+            
+            <div class="comparison-grid">
+                <div class="comparison-box">
+                    <div class="comparison-box-header">
+                        <strong>Northern Hemisphere</strong>
+                        <span class="direction-tag">Shadow → North</span>
+                    </div>
+                    <p>The sun sits primarily in the southern sky[cite: 2]. Consequently, ground shadows point toward true <strong>North</strong>[cite: 2].</p>
+                </div>
+                <div class="comparison-box">
+                    <div class="comparison-box-header">
+                        <strong>Southern Hemisphere</strong>
+                        <span class="direction-tag">Shadow → South</span>
+                    </div>
+                    <p>The sun sits primarily in the northern sky[cite: 2]. Consequently, ground shadows point toward true <strong>South</strong>[cite: 2].</p>
+                </div>
+            </div>
+
+            <div class="pro-tip">
+                <div class="pro-tip-icon">🧭</div>
+                <p><strong>Car Nadir Meta:</strong> Align the Google Maps compass to North and look down at the Street View car's own shadow[cite: 2]. If the car's shadow stretches north, you can instantly rule out southern nations like Australia, Argentina, and South Africa[cite: 2].</p>
+            </div>
+        </section>
+
+        <!-- Section 2 -->
+        <section class="strategy-card">
+            <div class="strategy-header">
+                <h2><span class="step-badge">STEP 02</span> Estimating the Time of Day</h2>
+                <span class="strategy-category">Solar Angle Clue</span>
+            </div>
+            <p>Once your hemisphere is established, shadow orientation reveals the local time of day[cite: 2]. Because the sun rises in the East and sets in the West, shadows move in the exact opposite direction[cite: 2].</p>
+
+            <div class="comparison-grid">
+                <div class="comparison-box">
+                    <div class="comparison-box-header">
+                        <strong>Morning Window</strong>
+                        <span class="direction-tag">Sunrise – Noon</span>
+                    </div>
+                    <p>The sun rises in the East, stretching long shadows toward the <strong>West</strong>[cite: 2].</p>
+                </div>
+                <div class="comparison-box">
+                    <div class="comparison-box-header">
+                        <strong>Afternoon Window</strong>
+                        <span class="direction-tag">Noon – Sunset</span>
+                    </div>
+                    <p>The sun descends in the West, casting shadows toward the <strong>East</strong>[cite: 2].</p>
+                </div>
+            </div>
+
+            <p style="margin-bottom: 0;">This timing is vital when combined with coverage metas: if you know Google's camera cars only operated during morning schedules in a particular territory, seeing a prominent western shadow confirms you are in that specific region[cite: 2].</p>
+        </section>
+
+        <!-- Section 3 -->
+        <section class="strategy-card">
+            <div class="strategy-header">
+                <h2><span class="step-badge">STEP 03</span> Seasonal Shadow Lengths</h2>
+                <span class="strategy-category">Temporal & Camera Meta</span>
+            </div>
+            <p>Shadow length also indicates the capture season[cite: 2]. During winter months, the sun remains low across the horizon, casting elongated shadows throughout the day[cite: 2]. During summer, high solar noon casts short, compact shadows directly beneath objects[cite: 2].</p>
+            
+            <div class="pro-tip">
+                <div class="pro-tip-icon">🌲</div>
+                <p><strong>Foliage Correlation:</strong> Cross-reference shadow length with foliage[cite: 2]. Elongated shadows combined with leafless deciduous trees signal late autumn or winter, helping you narrow the capture month and identify the camera generation Google had deployed[cite: 2].</p>
+            </div>
+        </section>
+
+        <!-- Quick Reference Matrix -->
+        <h2 style="color: var(--text-primary); margin-top: 3rem; font-size: 1.45rem;">Shadow Analysis Quick Reference Matrix</h2>
+        <div class="specs-table-container">
+            <table class="specs-table">
+                <thead>
+                    <tr>
+                        <th>Shadow Trajectory</th>
+                        <th>Solar Position</th>
+                        <th>Primary Deduction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong style="color: var(--text-primary);">Points Due North</strong></td>
+                        <td>Sun in Southern sky</td>
+                        <td>Northern Hemisphere (rules out Southern Hemisphere)[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color: var(--text-primary);">Points Due South</strong></td>
+                        <td>Sun in Northern sky</td>
+                        <td>Southern Hemisphere (rules out Northern Hemisphere)[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color: var(--text-primary);">Stretches West</strong></td>
+                        <td>Sun in Eastern sky</td>
+                        <td>Morning capture window (Sunrise to Solar Noon)[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color: var(--text-primary);">Stretches East</strong></td>
+                        <td>Sun in Western sky</td>
+                        <td>Afternoon capture window (Solar Noon to Sunset)[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color: var(--text-primary);">Elongated + Bare Trees</strong></td>
+                        <td>Low solar angle</td>
+                        <td>Winter / late autumn capture window[cite: 2]</td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color: var(--text-primary);">Short / Compact</strong></td>
+                        <td>High solar elevation</td>
+                        <td>Summer / midday solar capture window[cite: 2]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 style="color: var(--text-primary); margin-top: 2.5rem; font-size: 1.45rem;">The Ultimate Tool for Shadow Verification</h2>
+        <p>While visual shadow estimation is an essential competitive skill, confirming your hypotheses requires exact timestamp data[cite: 2]. Google Maps displays only a general month and year in the watermark, which cannot tell you the exact solar elevation[cite: 2].</p>
+        <p>Knowing the exact minute a panorama was shot provides the missing key for true solar calculations[cite: 2].</p>
+        
+        <!-- Promo CTA Card -->
         <div class="tool-promo">
             <h3>Verify Your Shadow Estimates</h3>
-            <p>Don't just guess the time of day. Use our free tool to extract the exact, second-by-second timestamp of any Street View panorama directly from Google's backend APIs.</p>
-            <a href="/" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background: var(--accent-primary); color: white; border-radius: 6px; font-weight: bold;">Extract a Timestamp Now</a>
+            <p>Don't rely on guesswork for solar angles[cite: 2]. Extract the exact, second-by-second capture timestamp of any Google Street View panorama directly from backend APIs[cite: 2].</p>
+            <a href="/" class="promo-btn">Extract a Timestamp Now →</a>
         </div>
-    </div>
+    </main>
 </body>
 </html>

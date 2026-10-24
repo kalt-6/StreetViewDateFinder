@@ -341,15 +341,11 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
     let minTimestamp = Date.UTC(baseDate.year, baseDate.month - 1, 1, 0, 0, 0) / 1000;
     let maxTimestamp = Date.UTC(baseDate.year, baseDate.month, 1, 0, 0, 0) / 1000;
 
-    let searchReq = pbfish.create("SingleImageSearchRequest");
-    searchReq.value = {
-        ...baseRequestContents,
-        imageKey: { frontend: "OFFICIAL", id: panoId },
-        queryOptions: {
-            ...baseRequestContents.queryOptions,
-            filter: { photoAge: { minTimestamp: 0, maxTimestamp: 0 } }
-        }
-    };
+    baseRequestContents.location.center.lat = lat;
+    baseRequestContents.location.center.lng = lng;
+    baseRequestContents.location.radius = 30;
+
+    let pingReq = pbfish.create("SingleImageSearchRequest");
 
     onLog(`Starting binary search for the exact second...`);
     let steps = 0;
@@ -358,8 +354,6 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
     while (maxTimestamp - minTimestamp > 1) {
         steps++;
         let midTimestamp = Math.floor((minTimestamp + maxTimestamp) / 2);
-        searchReq.value.queryOptions.filter.photoAge.minTimestamp = minTimestamp;
-        searchReq.value.queryOptions.filter.photoAge.maxTimestamp = midTimestamp;
 
         const progressPercent = Math.min(20 + Math.round((steps / 22) * 75), 95);
         onProgress({ 
@@ -367,8 +361,19 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
             stepText: `Splitting time window (step ${steps})...` 
         });
 
+        pingReq.value = {
+            ...baseRequestContents,
+            imageKey: { frontend: "OFFICIAL", id: panoId },
+            queryOptions: {
+                ...baseRequestContents.queryOptions,
+                filterOptions: {
+                    photoAge: { startSeconds: minTimestamp, endSeconds: midTimestamp }
+                }
+            }
+        };
+
         const res = await fetch(ENDPOINT, {
-            method: "POST", headers: HEADERS, body: JSON.stringify(searchReq.toArray())
+            method: "POST", headers: HEADERS, body: JSON.stringify(pingReq.toArray())
         }).then(r => r.json());
 
         const resp = silencePbfishWarnings(() => {
@@ -377,7 +382,7 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
             return p;
         });
 
-        if (resp.status.code === "OK") {
+        if (resp.status && resp.status.code === "OK") {
             maxTimestamp = midTimestamp;
         } else {
             minTimestamp = midTimestamp;

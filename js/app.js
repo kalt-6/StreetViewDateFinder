@@ -35,11 +35,8 @@ function getHistory() {
 function saveHistoryItem(item) {
     try {
         let history = getHistory();
-        // Remove duplicate if same panoId exists
         history = history.filter(h => h.panoId !== item.panoId);
-        // Prepend new item
         history.unshift(item);
-        // Keep max 8
         if (history.length > 8) history = history.slice(0, 8);
         localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
         renderHistory();
@@ -60,14 +57,13 @@ function renderHistory() {
     historyList.innerHTML = history.map(item => `
         <div class="history-item">
             <div class="history-item-left">
-                <span class="history-time">${escapeHtml(item.timeStr || item.dateStr || 'Archived')}</span>
+                <span class="history-time">${escapeHtml(item.timeStr || item.dateStr || 'Saved')}</span>
                 <span class="history-pano">${escapeHtml(item.panoId)} (${item.lat.toFixed(4)}, ${item.lng.toFixed(4)})</span>
             </div>
-            <button class="history-reload-btn" data-pano="${escapeHtml(item.panoId)}" title="Inspect this panorama again">Inspect</button>
+            <button class="history-reload-btn" data-pano="${escapeHtml(item.panoId)}" title="Check this location again">Load</button>
         </div>
     `).join('');
 
-    // Attach reload listeners
     historyList.querySelectorAll('.history-reload-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const pano = btn.getAttribute('data-pano');
@@ -89,18 +85,14 @@ function clearHistory() {
     }
 }
 
-// Logging and Progress
-let logBuffer = [];
-
+// Logs and Progress
 function resetLogs() {
-    logBuffer = [];
     if (logTerminal) logTerminal.textContent = '';
 }
 
 function appendLog(msg) {
     const timestamp = new Date().toISOString().substring(11, 19);
     const line = `[${timestamp}] ${msg}`;
-    logBuffer.push(line);
     if (logTerminal) {
         logTerminal.textContent += `${line}\n`;
         logTerminal.scrollTop = logTerminal.scrollHeight;
@@ -115,7 +107,6 @@ function updateProgress({ percent, stepText }) {
     if (progressStepText) progressStepText.textContent = stepText;
 }
 
-// Helpers
 function escapeHtml(str) {
     if (!str) return '';
     return String(str)
@@ -151,14 +142,8 @@ async function runExtraction() {
         return;
     }
 
-    // UI state
     runBtn.disabled = true;
-    runBtn.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="spin-icon">
-            <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
-        </svg>
-        Analyzing...
-    `;
+    runBtn.innerHTML = `Searching...`;
     resultDiv.style.display = 'none';
     resultDiv.innerHTML = '';
     resetLogs();
@@ -171,28 +156,22 @@ async function runExtraction() {
         resultDiv.style.display = 'block';
 
         if (result.isCeilingLimit) {
-            // Ceiling limit fallback
             resultDiv.innerHTML = `
                 <div class="result-card">
                     <div class="warning-fallback-box">
                         <div class="warning-fallback-title">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <line x1="12" y1="8" x2="12" y2="12"/>
-                                <line x1="12" y1="16" x2="12.01" y2="16"/>
-                            </svg>
-                            Exact Second Ceiling Limit Reached
+                            Exact Second Not Available For This Frame
                         </div>
-                        <p>Google's backend returned imagery for this sector but hit its internal timestamp indexing ceiling. Second-level precision is unavailable for this specific camera frame.</p>
+                        <p>Google's database couldn't narrow down this specific image to the exact second, but we confirmed the general capture period:</p>
                         <div style="margin-top: 8px;">
-                            <span style="color: var(--text-tertiary); font-size: 0.82rem; text-transform: uppercase;">Confirmed Capture Period:</span>
+                            <span style="color: var(--text-tertiary); font-size: 0.82rem; text-transform: uppercase;">Confirmed Month & Year:</span>
                             <div class="fallback-month-tag">${escapeHtml(result.fallbackMonth)} ${result.year}</div>
                         </div>
                     </div>
 
                     <div class="metrics-grid" style="margin-top: 1.25rem;">
                         <div class="metric-tile">
-                            <span class="metric-label">Panorama ID</span>
+                            <span class="metric-label">Pano ID</span>
                             <span class="metric-val">${escapeHtml(result.panoId)}</span>
                         </div>
                         <div class="metric-tile">
@@ -200,46 +179,38 @@ async function runExtraction() {
                             <span class="metric-val coord-value">${result.lat.toFixed(6)}, ${result.lng.toFixed(6)}</span>
                         </div>
                         <div class="metric-tile">
-                            <span class="metric-label">Camera Rig</span>
+                            <span class="metric-label">Camera Model</span>
                             <span class="metric-val">${escapeHtml(result.cameraGen.gen)} (${escapeHtml(result.cameraGen.years)})</span>
                         </div>
                     </div>
 
-                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;">
-                        💡 <strong>OSINT Tip:</strong> Move one click down the road in Google Maps and re-test the new URL. Consecutive frames often index cleanly!
+                    <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.85rem; line-height: 1.5;">
+                        💡 <strong>Quick Tip:</strong> Click one spot forward or backward down the road in Google Maps and paste that new URL. Adjacent frames often have the exact second available!
                     </div>
                 </div>
             `;
         } else {
-            // Full precision success!
             const mapsUrl = `https://www.google.com/maps/@?api=1&map_action=pano&pano=${encodeURIComponent(result.panoId)}`;
             const osmUrl = `https://www.openstreetmap.org/?mlat=${result.lat}&mlon=${result.lng}#map=18/${result.lat}/${result.lng}`;
             const shareUrl = `${window.location.origin}/?pano=${encodeURIComponent(result.panoId)}`;
 
-            const dossierText = `[Street View Image Capture Dossier]
-Panorama ID: ${result.panoId}
-Coordinates: ${result.lat.toFixed(6)}, ${result.lng.toFixed(6)}
-Location Time: ${result.localPanoTime}
-UTC Timestamp: ${result.utcIso}
-Unix Epoch: ${result.exactUnix}
-Timezone: ${result.timezone}
-Camera Generation: ${result.cameraGen.gen} (${result.cameraGen.years})
-Solar Elevation: ${result.sunPosition.elevation}°
-Solar Azimuth: ${result.sunPosition.azimuth}° ${result.sunPosition.azimuthCardinal}
-Shadow Vector: Cast toward ${result.sunPosition.shadowDirection}° ${result.sunPosition.shadowCardinal}
-Verified via: https://streetviewdate.com/?pano=${result.panoId}`;
+            const summaryText = `Street View Capture Details:
+- Location Time: ${result.localPanoTime}
+- UTC Time: ${result.utcIso}
+- Unix Timestamp: ${result.exactUnix}
+- Coordinates: ${result.lat.toFixed(6)}, ${result.lng.toFixed(6)}
+- Pano ID: ${result.panoId}
+- Camera: ${result.cameraGen.gen} (${result.cameraGen.years})
+- Link: https://streetviewdate.com/?pano=${result.panoId}`;
 
             resultDiv.innerHTML = `
                 <div class="result-card">
                     <div class="result-header-verified">
                         <div class="result-status-tag">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                <polyline points="20 6 9 17 4 12"/>
-                            </svg>
-                            Exact Timestamp Verified
+                            Exact Timestamp Found
                         </div>
                         <div class="hero-timestamp timestamp-display">${escapeHtml(result.localPanoTime)}</div>
-                        <div class="secondary-timestamp">Your Browser Time: <strong>${escapeHtml(result.yourLocalTime)}</strong></div>
+                        <div class="secondary-timestamp">Your local time: <strong>${escapeHtml(result.yourLocalTime)}</strong></div>
                     </div>
 
                     <!-- Metrics Grid -->
@@ -247,93 +218,44 @@ Verified via: https://streetviewdate.com/?pano=${result.panoId}`;
                         <div class="metric-tile">
                             <span class="metric-label">UTC (ISO 8601)</span>
                             <span class="metric-val tabular-nums">${escapeHtml(result.utcIso)}</span>
-                            <button class="metric-copy-action copy-utc-btn" data-copy="${escapeHtml(result.utcIso)}">Copy UTC</button>
+                            <button class="metric-copy-action copy-utc-btn" data-copy="${escapeHtml(result.utcIso)}">Copy</button>
                         </div>
                         <div class="metric-tile">
-                            <span class="metric-label">Unix Epoch</span>
+                            <span class="metric-label">Unix Timestamp</span>
                             <span class="metric-val tabular-nums">${result.exactUnix}</span>
-                            <button class="metric-copy-action copy-unix-btn" data-copy="${result.exactUnix}">Copy Epoch</button>
+                            <button class="metric-copy-action copy-unix-btn" data-copy="${result.exactUnix}">Copy</button>
                         </div>
                         <div class="metric-tile">
                             <span class="metric-label">Pano ID</span>
                             <span class="metric-val" style="font-size: 0.8rem;">${escapeHtml(result.panoId)}</span>
-                            <button class="metric-copy-action copy-pano-btn" data-copy="${escapeHtml(result.panoId)}">Copy ID</button>
+                            <button class="metric-copy-action copy-pano-btn" data-copy="${escapeHtml(result.panoId)}">Copy</button>
                         </div>
                         <div class="metric-tile">
-                            <span class="metric-label">Geographic Coordinates</span>
+                            <span class="metric-label">Coordinates</span>
                             <span class="metric-val coord-value">${result.lat.toFixed(6)}, ${result.lng.toFixed(6)}</span>
                             <div style="display: flex; gap: 8px; margin-top: 4px;">
-                                <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="metric-copy-action" style="text-decoration: none;">Maps ↗</a>
+                                <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="metric-copy-action" style="text-decoration: none;">Google Maps ↗</a>
                                 <a href="${osmUrl}" target="_blank" rel="noopener noreferrer" class="metric-copy-action" style="text-decoration: none;">OSM ↗</a>
                             </div>
                         </div>
                         <div class="metric-tile">
-                            <span class="metric-label">Timezone (IANA)</span>
+                            <span class="metric-label">Timezone</span>
                             <span class="metric-val" style="font-size: 0.85rem;">${escapeHtml(result.timezone)}</span>
                         </div>
                         <div class="metric-tile">
-                            <span class="metric-label">Camera System</span>
+                            <span class="metric-label">Camera</span>
                             <span class="metric-val">${escapeHtml(result.cameraGen.gen)}</span>
                             <span style="font-size: 0.72rem; color: var(--text-tertiary);">${escapeHtml(result.cameraGen.desc)}</span>
-                        </div>
-                    </div>
-
-                    <!-- Solar & Shadow Dossier for OSINT / GeoGuessr -->
-                    <div class="solar-card">
-                        <div class="solar-header">
-                            <span class="solar-title">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="5"/>
-                                    <line x1="12" y1="1" x2="12" y2="3"/>
-                                    <line x1="12" y1="21" x2="12" y2="23"/>
-                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                                    <line x1="1" y1="12" x2="3" y2="12"/>
-                                    <line x1="21" y1="12" x2="23" y2="12"/>
-                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                                </svg>
-                                Calculated Sun Position & Shadow Direction
-                            </span>
-                            <span style="font-size: 0.72rem; color: var(--text-tertiary);">NOAA Solar Equations</span>
-                        </div>
-                        <div class="solar-stats">
-                            <div class="solar-stat-item">
-                                <div class="solar-stat-name">Solar Altitude (Elevation)</div>
-                                <div class="solar-stat-value tabular-nums">${result.sunPosition.elevation > 0 ? '+' : ''}${result.sunPosition.elevation}°</div>
-                                <span style="font-size: 0.72rem; color: var(--text-tertiary);">${result.sunPosition.isDaylight ? 'Sun above horizon' : 'Dawn / Dusk or Night'}</span>
-                            </div>
-                            <div class="solar-stat-item">
-                                <div class="solar-stat-name">Solar Azimuth (Sun Angle)</div>
-                                <div class="solar-stat-value tabular-nums">${result.sunPosition.azimuth}° ${result.sunPosition.azimuthCardinal}</div>
-                                <span style="font-size: 0.72rem; color: var(--text-tertiary);">Clockwise from North</span>
-                            </div>
-                            <div class="solar-stat-item">
-                                <div class="solar-stat-name">Projected Ground Shadow</div>
-                                <div class="solar-stat-value tabular-nums" style="color: var(--accent-cyan);">${result.sunPosition.shadowDirection}° ${result.sunPosition.shadowCardinal}</div>
-                                <span style="font-size: 0.72rem; color: var(--text-tertiary);">Shadow fall direction</span>
-                            </div>
                         </div>
                     </div>
 
                     <!-- Action Bar -->
                     <div class="result-toolbar">
                         <button class="btn-action copy-summary-btn">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                            </svg>
-                            Copy OSINT Dossier
+                            Copy Info
                         </button>
                         <button class="btn-action share-link-btn">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="18" cy="5" r="3"/>
-                                <circle cx="6" cy="12" r="3"/>
-                                <circle cx="18" cy="19" r="3"/>
-                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                            </svg>
-                            Share Result Link
+                            Share Link
                         </button>
                         <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn-action">
                             Open in Google Maps ↗
@@ -342,10 +264,9 @@ Verified via: https://streetviewdate.com/?pano=${result.panoId}`;
                 </div>
             `;
 
-            // Wire action buttons
             const copySummaryBtn = resultDiv.querySelector('.copy-summary-btn');
             if (copySummaryBtn) {
-                copySummaryBtn.addEventListener('click', () => copyToClipboard(dossierText, copySummaryBtn, 'Dossier Copied!'));
+                copySummaryBtn.addEventListener('click', () => copyToClipboard(summaryText, copySummaryBtn, 'Copied!'));
             }
 
             const shareLinkBtn = resultDiv.querySelector('.share-link-btn');
@@ -363,7 +284,6 @@ Verified via: https://streetviewdate.com/?pano=${result.panoId}`;
                 b.addEventListener('click', () => copyToClipboard(result.panoId, b));
             });
 
-            // Save to recent searches
             saveHistoryItem({
                 panoId: result.panoId,
                 timeStr: result.localPanoTime.split('at')[0].trim(),
@@ -376,18 +296,13 @@ Verified via: https://streetviewdate.com/?pano=${result.panoId}`;
     } catch (err) {
         if (progressCard) progressCard.style.display = 'none';
         resultDiv.style.display = 'block';
-        appendLog(`ERROR: ${err.message}`);
+        appendLog(`Error: ${err.message}`);
 
         resultDiv.innerHTML = `
             <div class="result-card">
                 <div class="error-alert-box">
                     <div class="error-alert-title">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="12" y1="8" x2="12" y2="12"/>
-                            <line x1="12" y1="16" x2="12.01" y2="16"/>
-                        </svg>
-                        Extraction Error
+                        Couldn't find the date
                     </div>
                     <p>${escapeHtml(err.message)}</p>
                 </div>
@@ -447,7 +362,7 @@ if (toggleLogBtn && logTerminal) {
     toggleLogBtn.addEventListener('click', () => {
         const isHidden = logTerminal.style.display === 'none';
         logTerminal.style.display = isHidden ? 'block' : 'none';
-        toggleLogBtn.textContent = isHidden ? 'Hide Protocol Logs ▲' : 'View Protocol Logs ▼';
+        toggleLogBtn.textContent = isHidden ? 'Hide Logs ▲' : 'View Protocol Logs ▼';
     });
 }
 
@@ -463,7 +378,6 @@ document.querySelectorAll('.sample-pill').forEach(pill => {
     });
 });
 
-// Clear History Button
 if (clearHistoryBtn) {
     clearHistoryBtn.addEventListener('click', clearHistory);
 }

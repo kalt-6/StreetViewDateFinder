@@ -1269,9 +1269,32 @@ main {
     padding-top: 0.75rem;
 }
 
+.article-card {
+    cursor: pointer;
+}
+
+.article-card:hover .read-link {
+    color: var(--accent-cyan-hover);
+    transform: translateX(3px);
+}
+
+.article-card:hover h3 a {
+    color: var(--accent-cyan);
+}
+
 .read-link {
     color: var(--accent-cyan);
     font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.read-link:hover {
+    color: var(--accent-cyan-hover);
+    transform: translateX(3px);
 }
 
 /* Footer */

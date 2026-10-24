@@ -34,6 +34,35 @@ export function isMobileShortLink(str) {
 }
 
 /**
+ * Unwrap Google EU cookie consent redirect if present
+ */
+function unwrapConsentRedirect(url) {
+    if (!url || typeof url !== 'string') return url;
+    if (url.includes('consent.google.com') && url.includes('continue=')) {
+        try {
+            const u = new URL(url);
+            const cont = u.searchParams.get('continue');
+            if (cont) return decodeURIComponent(cont);
+        } catch (e) {}
+    }
+    return url;
+}
+
+/**
+ * Check if a URL contains identifiable Street View coordinate or Pano ID data
+ */
+function containsUsableLocationData(url) {
+    if (!url || typeof url !== 'string') return false;
+    // Standard coordinates: @lat,lng or lat, lng
+    if (/@-?\d+\.\d+,\s*-?\d+\.\d+/.test(url)) return true;
+    // Query parameters: q=lat,lng or ll=lat,lng or center=lat,lng
+    if (/[?&](?:q|ll|center|sll)=-?\d+\.\d+(?:%2C|,)-?\d+\.\d+/i.test(url)) return true;
+    // Pano ID in URL
+    if (/(?:!1s|pano=|panoid=)[a-zA-Z0-9_\-]{22}/.test(url)) return true;
+    return false;
+}
+
+/**
  * Attempt to unshorten a mobile Google Maps URL.
  * Checks local edge proxy route first, then public resolver, and falls back gracefully.
  */
@@ -51,9 +80,16 @@ export async function unshortenMobileUrl(shortUrl, onLog = () => {}) {
         const localRes = await fetch(localApi);
         if (localRes.ok) {
             const data = await localRes.json();
+            if (data.lat !== undefined && data.lng !== undefined) {
+                onLog(`Extracted coordinates from pin: ${data.lat.toFixed(6)}, ${data.lng.toFixed(6)}`);
+                return `${data.lat}, ${data.lng}`;
+            }
             if (data.resolvedUrl && data.resolvedUrl !== cleanUrl) {
-                onLog(`Expanded via edge API`);
-                return data.resolvedUrl;
+                const unwrapped = unwrapConsentRedirect(data.resolvedUrl);
+                if (containsUsableLocationData(unwrapped)) {
+                    onLog(`Expanded via edge API`);
+                    return unwrapped;
+                }
             }
         }
     } catch (e) {
@@ -71,8 +107,14 @@ export async function unshortenMobileUrl(shortUrl, onLog = () => {}) {
         if (res.ok) {
             const data = await res.json();
             if (data.success && data.resolved_url) {
-                onLog(`Expanded via resolver: ${data.resolved_url}`);
-                return data.resolved_url;
+                const unwrapped = unwrapConsentRedirect(data.resolved_url);
+                if (containsUsableLocationData(unwrapped)) {
+                    onLog(`Expanded via resolver`);
+                    return unwrapped;
+                } else {
+                    onLog(`Dropped pin requires browser opening to resolve coordinates`);
+                    return null;
+                }
             }
         }
     } catch (e) {
@@ -87,7 +129,10 @@ export async function unshortenMobileUrl(shortUrl, onLog = () => {}) {
  */
 export function parseInput(rawInput) {
     if (!rawInput || typeof rawInput !== 'string') return null;
-    const input = decodeURIComponent(rawInput.trim());
+    let input = decodeURIComponent(rawInput.trim());
+
+    // Unwrap consent.google.com redirect if passed directly
+    input = unwrapConsentRedirect(input);
 
     // 1. Mobile short links
     if (isMobileShortLink(input)) {
@@ -108,8 +153,9 @@ export function parseInput(rawInput) {
         return { type: 'PANO_ID', panoId: panoMatch[1] };
     }
 
-    // 4. Coordinates in standard format: lat, lng or @lat,lng or ?q=lat,lng
-    const coordMatch = input.match(/@?(-?\d+\.\d+)[,\s]+(-?\d+\.\d+)/);
+    // 4. Coordinates in standard format: lat, lng or @lat,lng or ?q=lat,lng or center=lat,lng or ll=lat,lng
+    const coordMatch = input.match(/@?(-?\d+\.\d+)[,\s]+(-?\d+\.\d+)/) ||
+                       input.match(/[?&](?:q|ll|center|sll)=(-?\d+\.\d+)(?:%2C|,)(-?\d+\.\d+)/i);
     if (coordMatch) {
         const lat = parseFloat(coordMatch[1]);
         const lng = parseFloat(coordMatch[2]);
@@ -151,8 +197,13 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
     let targetInput = (input || '').trim();
     if (!targetInput) throw new Error("Please enter a link, Pano ID, or coordinates.");
 
-    // Handle mobile short links automatically
-    if (isMobileShortLink(targetInput)) {
+    const isShortMobile = isMobileShortLink(targetInput);
+    let originalMobileUrl = targetInput;
+    if (isShortMobile) {
+        if (!originalMobileUrl.startsWith('http://') && !originalMobileUrl.startsWith('https://')) {
+            originalMobileUrl = 'https://' + originalMobileUrl;
+        }
+
         onLog(`Mobile short link detected: ${targetInput}`);
         onProgress({ percent: 5, stepText: "Expanding mobile link..." });
 
@@ -161,20 +212,23 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
             targetInput = expanded;
             onLog(`Successfully expanded mobile link`);
         } else {
-            const mobileErr = new Error(`Mobile short link detected: ${targetInput}`);
+            const mobileErr = new Error(`Mobile short link requires browser opening`);
             mobileErr.isMobileLink = true;
-            let fullUrl = targetInput;
-            if (!fullUrl.startsWith('http://') && !fullUrl.startsWith('https://')) {
-                fullUrl = 'https://' + fullUrl;
-            }
-            mobileErr.originalUrl = fullUrl;
+            mobileErr.originalUrl = originalMobileUrl;
             throw mobileErr;
         }
     }
 
     const parsed = parseInput(targetInput);
-    if (!parsed) throw new Error("Please enter a link, Pano ID, or coordinates.");
-    if (parsed.error) throw new Error(parsed.error);
+    if (!parsed || parsed.type === 'INVALID' || parsed.error) {
+        if (isShortMobile) {
+            const mobileErr = new Error(`Mobile short link requires browser opening`);
+            mobileErr.isMobileLink = true;
+            mobileErr.originalUrl = originalMobileUrl;
+            throw mobileErr;
+        }
+        throw new Error(parsed?.error || "Could not find a valid Street View link, Pano ID, or coordinates. Please paste a desktop Google Maps link, a 22-character Pano ID, or coordinates (like 40.7580, -73.9855).");
+    }
 
     onLog(`Checking input format...`);
     onProgress({ percent: 8, stepText: "Connecting to Google..." });
@@ -200,7 +254,7 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
 
     // Case A: Query by coordinates
     if (parsed.type === 'COORDINATES') {
-        onLog(`Searching for nearest Street View image to ${parsed.lat}, ${parsed.lng}...`);
+        onLog(`Searching for nearest Street View image to ${parsed.lat.toFixed(6)}, ${parsed.lng.toFixed(6)}...`);
         onProgress({ percent: 15, stepText: "Finding nearest street view image..." });
 
         baseRequestContents.location.center.lat = parsed.lat;

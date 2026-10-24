@@ -337,9 +337,10 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
     const fallbackMonth = MONTH_NAMES[baseDate.month - 1] || 'Unknown';
     onLog(`Confirmed capture period: ${fallbackMonth} ${baseDate.year}`);
 
-    // Set search window based on confirmed month & year
-    let minTimestamp = Date.UTC(baseDate.year, baseDate.month - 1, 1, 0, 0, 0) / 1000;
-    let maxTimestamp = Date.UTC(baseDate.year, baseDate.month, 1, 0, 0, 0) / 1000;
+    // Set search window based on confirmed month & year (UTC bounds with safety margin)
+    let minTimestamp = Math.round(Date.UTC(baseDate.year, baseDate.month - 1, 0, 0, 0, 0) / 1000);
+    let maxTimestamp = Math.round(Date.UTC(baseDate.year, baseDate.month, 2, 0, 0, 0) / 1000);
+    const ceilingLimit = maxTimestamp;
 
     baseRequestContents.location.center.lat = lat;
     baseRequestContents.location.center.lng = lng;
@@ -351,9 +352,9 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
     let steps = 0;
     const maxSteps = 28;
 
-    while (maxTimestamp - minTimestamp > 1) {
+    while (maxTimestamp - minTimestamp > 2) {
         steps++;
-        let midTimestamp = Math.floor((minTimestamp + maxTimestamp) / 2);
+        let midTimestamp = Math.round((minTimestamp + maxTimestamp) / 2);
 
         const progressPercent = Math.min(20 + Math.round((steps / 22) * 75), 95);
         onProgress({ 
@@ -363,7 +364,6 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
 
         pingReq.value = {
             ...baseRequestContents,
-            imageKey: { frontend: "OFFICIAL", id: panoId },
             queryOptions: {
                 ...baseRequestContents.queryOptions,
                 filterOptions: {
@@ -389,7 +389,7 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
         }
 
         if (steps >= maxSteps) {
-            onLog(`Ceiling limit reached at step ${steps}.`);
+            onLog(`Search limit reached at step ${steps}.`);
             break;
         }
     }
@@ -400,9 +400,9 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
     const exactDate = new Date(exactUnix * 1000);
     const cameraGen = estimateCameraGeneration(baseDate.year);
 
-    // Fallback if binary search didn't narrow down (e.g. pre-2015 imagery)
-    if (maxTimestamp - minTimestamp > 60) {
-        onLog(`Binary search could not resolve to the exact second.`);
+    // Fallback if binary search hit ceiling limit or couldn't resolve (e.g. pre-2015 imagery)
+    if (exactUnix >= ceilingLimit - 10 || (maxTimestamp - minTimestamp > 60)) {
+        onLog(`Exact second unavailable for this panorama (common for older or unindexed imagery).`);
         return {
             success: true,
             isExact: false,

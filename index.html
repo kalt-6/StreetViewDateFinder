@@ -130,15 +130,6 @@
                         </button>
                     </div>
 
-                    <!-- Quick 1-Click Samples -->
-                    <div class="sample-bar">
-                        <span class="sample-label">Try a sample:</span>
-                        <button class="sample-pill" data-query="ywskIOsAFskiKHt5fwIUWA">Times Square, NYC</button>
-                        <button class="sample-pill" data-query="48.8584, 2.2945">Eiffel Tower, Paris</button>
-                        <button class="sample-pill" data-query="35.6895, 139.7006">Shinjuku, Tokyo</button>
-                        <button class="sample-pill" data-query="36.0544, -112.1401">Grand Canyon, AZ</button>
-                    </div>
-
                     <!-- Live Progress Indicator -->
                     <div id="progressCard" class="progress-card">
                         <div class="progress-header">
@@ -278,7 +269,7 @@
                         <div class="guide-step-index">02</div>
                         <div class="guide-content">
                             <h3>Copy the link</h3>
-                            <p>Copy the full URL from your browser's address bar. (Make sure to use the full desktop link, not a shortened mobile share link).</p>
+                            <p>Copy the URL from your browser's address bar or Google Maps share menu. Mobile links (maps.app.goo.gl) are automatically detected and expanded.</p>
                         </div>
                     </div>
 
@@ -313,14 +304,13 @@
                 <div class="faq-stack">
                     <div class="faq-item">
                         <button class="faq-question">
-                            <span>Why don't short mobile links work?</span>
+                            <span>Can I use mobile Google Maps links (maps.app.goo.gl)?</span>
                             <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"/>
                             </svg>
                         </button>
                         <div class="faq-answer">
-                            <p>When you tap "Share" in the Google Maps phone app, it creates a shortened redirect link (like <code>maps.app.goo.gl</code>). Google blocks automated web tools from following these short redirects to prevent bot abuse.</p>
-                            <p>To use an image from your phone, open the short link in a browser, let the full page load, and copy the long address bar URL instead.</p>
+                            <p>Yes. You can paste mobile links directly into the tool. The tool will automatically attempt to resolve the short link. If Google's redirect restrictions prevent direct expansion in your browser, a 1-click helper will let you open the link in a new tab to capture the full URL immediately.</p>
                         </div>
                     </div>
 

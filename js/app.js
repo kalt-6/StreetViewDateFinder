@@ -233,19 +233,20 @@ async function runExtraction() {
                         <div class="metric-tile">
                             <span class="metric-label">Coordinates</span>
                             <span class="metric-val coord-value">${result.lat.toFixed(6)}, ${result.lng.toFixed(6)}</span>
-                            <div style="display: flex; gap: 8px; margin-top: 4px;">
+                            <div class="metric-tile-actions" style="display: flex; gap: 8px; margin-top: auto; padding-top: 4px;">
                                 <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="metric-copy-action" style="text-decoration: none;">Google Maps ↗</a>
                                 <a href="${osmUrl}" target="_blank" rel="noopener noreferrer" class="metric-copy-action" style="text-decoration: none;">OSM ↗</a>
                             </div>
                         </div>
                         <div class="metric-tile">
                             <span class="metric-label">Timezone</span>
-                            <span class="metric-val" style="font-size: 0.85rem;">${escapeHtml(result.timezone)}</span>
+                            <span class="metric-val" style="font-size: 0.90rem;">${escapeHtml(result.timezone)}</span>
+                            <span class="metric-subtext">${escapeHtml(result.tzShort ? `${result.tzShort} (${result.tzOffsetStr})` : (result.tzOffsetStr || 'Local time zone'))}</span>
                         </div>
                         <div class="metric-tile">
                             <span class="metric-label">Camera</span>
                             <span class="metric-val">${escapeHtml(result.cameraGen.gen)}</span>
-                            <span style="font-size: 0.72rem; color: var(--text-tertiary);">${escapeHtml(result.cameraGen.desc)}</span>
+                            <span class="metric-subtext" style="margin-top: auto;">${escapeHtml(result.cameraGen.desc)}</span>
                         </div>
                     </div>
 
@@ -297,6 +298,42 @@ async function runExtraction() {
         if (progressCard) progressCard.style.display = 'none';
         resultDiv.style.display = 'block';
         appendLog(`Error: ${err.message}`);
+
+        if (err.isMobileLink) {
+            const cleanUrl = escapeHtml(err.originalUrl);
+            resultDiv.innerHTML = `
+                <div class="result-card mobile-link-card">
+                    <div class="mobile-helper-header">
+                        <span class="mobile-helper-badge">Mobile Link Detected</span>
+                        <h3 class="mobile-helper-title">One Quick Step to View This Image</h3>
+                    </div>
+                    <p class="mobile-helper-desc">
+                        Google mobile links (<code>maps.app.goo.gl</code>) hide the exact coordinates until opened in a browser. Tap the button below to expand the link in a new tab, then copy its address bar URL:
+                    </p>
+                    <div class="mobile-action-box">
+                        <a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="btn-primary mobile-open-btn" id="openMobileLinkBtn">
+                            Open in New Tab ↗
+                        </a>
+                        <span class="mobile-or-text">then paste the expanded URL here</span>
+                    </div>
+                    <div class="mobile-instructions">
+                        <div class="mobile-step">
+                            <span class="step-num">1</span>
+                            <span>Click <strong>Open in New Tab</strong> above.</span>
+                        </div>
+                        <div class="mobile-step">
+                            <span class="step-num">2</span>
+                            <span>Google Maps will open and automatically show the full URL in your browser's address bar.</span>
+                        </div>
+                        <div class="mobile-step">
+                            <span class="step-num">3</span>
+                            <span>Copy that URL and paste it right back here!</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return;
+        }
 
         resultDiv.innerHTML = `
             <div class="result-card">
@@ -365,18 +402,6 @@ if (toggleLogBtn && logTerminal) {
         toggleLogBtn.textContent = isHidden ? 'Hide Logs ▲' : 'View Protocol Logs ▼';
     });
 }
-
-// Sample Pill Listeners
-document.querySelectorAll('.sample-pill').forEach(pill => {
-    pill.addEventListener('click', () => {
-        const query = pill.getAttribute('data-query');
-        if (query && urlInput) {
-            urlInput.value = query;
-            clearInputBtn.style.display = 'block';
-            runExtraction();
-        }
-    });
-});
 
 if (clearHistoryBtn) {
     clearHistoryBtn.addEventListener('click', clearHistory);

@@ -25,6 +25,64 @@ function silencePbfishWarnings(callback) {
 }
 
 /**
+ * Check if input is a shortened Google Maps mobile link
+ */
+export function isMobileShortLink(str) {
+    if (!str || typeof str !== 'string') return false;
+    const trimmed = str.trim();
+    return /(?:maps\.app\.goo\.gl|goo\.gl\/maps)/i.test(trimmed);
+}
+
+/**
+ * Attempt to unshorten a mobile Google Maps URL.
+ * Checks local edge proxy route first, then public resolver, and falls back gracefully.
+ */
+export async function unshortenMobileUrl(shortUrl, onLog = () => {}) {
+    let cleanUrl = shortUrl.trim();
+    if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
+        cleanUrl = 'https://' + cleanUrl;
+    }
+
+    onLog(`Attempting to expand mobile short link...`);
+
+    // Method 1: Check local serverless edge proxy (if hosted on Vercel/Netlify/Node)
+    try {
+        const localApi = `/api/unshorten?url=${encodeURIComponent(cleanUrl)}`;
+        const localRes = await fetch(localApi);
+        if (localRes.ok) {
+            const data = await localRes.json();
+            if (data.resolvedUrl && data.resolvedUrl !== cleanUrl) {
+                onLog(`Expanded via edge API`);
+                return data.resolvedUrl;
+            }
+        }
+    } catch (e) {
+        // Local API route not running in static-only environment
+    }
+
+    // Method 2: Public unshortener API with strict timeout
+    try {
+        const ctrl = new AbortController();
+        const timeoutId = setTimeout(() => ctrl.abort(), 3500);
+        const res = await fetch(`https://unshorten.me/json/${encodeURIComponent(cleanUrl)}`, {
+            signal: ctrl.signal
+        });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success && data.resolved_url) {
+                onLog(`Expanded via resolver: ${data.resolved_url}`);
+                return data.resolved_url;
+            }
+        }
+    } catch (e) {
+        onLog(`Automatic unshortener unavailable`);
+    }
+
+    return null;
+}
+
+/**
  * Parse input string into recognized format
  */
 export function parseInput(rawInput) {
@@ -32,10 +90,10 @@ export function parseInput(rawInput) {
     const input = decodeURIComponent(rawInput.trim());
 
     // 1. Mobile short links
-    if (input.includes('goo.gl') || input.includes('maps.app.goo.gl')) {
+    if (isMobileShortLink(input)) {
         return {
             type: 'SHORT_MOBILE_URL',
-            error: 'Google blocks short mobile links (like maps.app.goo.gl) from being queried directly. To use this image, open the link in your browser first and copy the full, expanded address bar URL.'
+            url: input
         };
     }
 
@@ -50,7 +108,7 @@ export function parseInput(rawInput) {
         return { type: 'PANO_ID', panoId: panoMatch[1] };
     }
 
-    // 4. Coordinates in standard format: lat, lng or @lat,lng
+    // 4. Coordinates in standard format: lat, lng or @lat,lng or ?q=lat,lng
     const coordMatch = input.match(/@?(-?\d+\.\d+)[,\s]+(-?\d+\.\d+)/);
     if (coordMatch) {
         const lat = parseFloat(coordMatch[1]);
@@ -62,7 +120,7 @@ export function parseInput(rawInput) {
 
     return {
         type: 'INVALID',
-        error: 'Could not find a valid Street View link, Pano ID, or coordinates. Please paste a full desktop Google Maps URL, a 22-character Pano ID, or decimal coordinates (like 40.7580, -73.9855).'
+        error: 'Could not find a valid Street View link, Pano ID, or coordinates. Please paste a desktop Google Maps link, a 22-character Pano ID, or coordinates (like 40.7580, -73.9855).'
     };
 }
 
@@ -90,12 +148,36 @@ const MONTH_NAMES = [
  * Execute SingleImageSearch extraction
  */
 export async function extractTimestamp(input, onProgress = () => {}, onLog = () => {}) {
-    const parsed = parseInput(input);
+    let targetInput = (input || '').trim();
+    if (!targetInput) throw new Error("Please enter a link, Pano ID, or coordinates.");
+
+    // Handle mobile short links automatically
+    if (isMobileShortLink(targetInput)) {
+        onLog(`Mobile short link detected: ${targetInput}`);
+        onProgress({ percent: 5, stepText: "Expanding mobile link..." });
+
+        const expanded = await unshortenMobileUrl(targetInput, onLog);
+        if (expanded) {
+            targetInput = expanded;
+            onLog(`Successfully expanded mobile link`);
+        } else {
+            const mobileErr = new Error(`Mobile short link detected: ${targetInput}`);
+            mobileErr.isMobileLink = true;
+            let fullUrl = targetInput;
+            if (!fullUrl.startsWith('http://') && !fullUrl.startsWith('https://')) {
+                fullUrl = 'https://' + fullUrl;
+            }
+            mobileErr.originalUrl = fullUrl;
+            throw mobileErr;
+        }
+    }
+
+    const parsed = parseInput(targetInput);
     if (!parsed) throw new Error("Please enter a link, Pano ID, or coordinates.");
     if (parsed.error) throw new Error(parsed.error);
 
     onLog(`Checking input format...`);
-    onProgress({ percent: 5, stepText: "Checking link..." });
+    onProgress({ percent: 8, stepText: "Connecting to Google..." });
 
     const pbfish = new Pbfish(SingleImageSearch);
 
@@ -119,7 +201,7 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
     // Case A: Query by coordinates
     if (parsed.type === 'COORDINATES') {
         onLog(`Searching for nearest Street View image to ${parsed.lat}, ${parsed.lng}...`);
-        onProgress({ percent: 12, stepText: "Finding nearest street view image..." });
+        onProgress({ percent: 15, stepText: "Finding nearest street view image..." });
 
         baseRequestContents.location.center.lat = parsed.lat;
         baseRequestContents.location.center.lng = parsed.lng;
@@ -152,7 +234,7 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
         // Case B: Direct Pano ID
         panoId = parsed.panoId;
         onLog(`Looking up panorama ID: ${panoId}`);
-        onProgress({ percent: 12, stepText: "Fetching image details from Google..." });
+        onProgress({ percent: 15, stepText: "Fetching image details from Google..." });
 
         let initReq = pbfish.create("SingleImageSearchRequest");
         initReq.value = {
@@ -164,82 +246,73 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
             method: "POST", headers: HEADERS, body: JSON.stringify(initReq.toArray())
         }).then(r => r.json());
 
-        const initResp = silencePbfishWarnings(() => {
+        const initialResp = silencePbfishWarnings(() => {
             const resp = pbfish.create("SingleImageSearchResponse");
             resp.fromArray(initialRes);
             return resp;
         });
 
-        if (initResp.status.code !== "OK" || !initResp.metadata) {
-            throw new Error("Couldn't find this panorama on Google's servers. It might be private, taken down, or a user-uploaded photosphere.");
+        if (initialResp.status.code !== "OK" || !initialResp.metadata) {
+            throw new Error(`Google could not find panorama ID "${panoId}". The image may be private, removed, or a third-party upload.`);
         }
 
-        baseDate = initResp.metadata.date.date;
-
-        try {
-            lat = initResp.metadata.information[0].location.location.lat;
-            lng = initResp.metadata.information[0].location.location.lng;
-        } catch (e) {
-            throw new Error("Could not find the coordinates needed to calculate the time.");
-        }
+        baseDate = initialResp.metadata.date.date;
+        lat = initialResp.metadata.information[0].location.location.lat;
+        lng = initialResp.metadata.information[0].location.location.lng;
     }
 
-    onLog(`Confirmed capture period: ${baseDate.year}-${String(baseDate.month).padStart(2, '0')}`);
-    onLog(`Location: ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+    const fallbackMonth = MONTH_NAMES[baseDate.month - 1] || 'Unknown';
+    onLog(`Confirmed capture period: ${fallbackMonth} ${baseDate.year}`);
 
-    baseRequestContents.location.center.lat = lat;
-    baseRequestContents.location.center.lng = lng;
-    baseRequestContents.location.radius = 30;
+    // Set search window based on confirmed month & year
+    let minTimestamp = Date.UTC(baseDate.year, baseDate.month - 1, 1, 0, 0, 0) / 1000;
+    let maxTimestamp = Date.UTC(baseDate.year, baseDate.month, 1, 0, 0, 0) / 1000;
 
-    let minTimestamp = Math.round(new Date(baseDate.year, baseDate.month - 1, 0).getTime() / 1000);
-    let maxTimestamp = Math.round(new Date(baseDate.year, baseDate.month, 2).getTime() / 1000);
-    const ceilingLimit = maxTimestamp;
+    let searchReq = pbfish.create("SingleImageSearchRequest");
+    searchReq.value = {
+        ...baseRequestContents,
+        imageKey: { frontend: "OFFICIAL", id: panoId },
+        queryOptions: {
+            ...baseRequestContents.queryOptions,
+            filter: { photoAge: { minTimestamp: 0, maxTimestamp: 0 } }
+        }
+    };
 
-    let pingReq = pbfish.create("SingleImageSearchRequest");
-    pingReq.value = baseRequestContents;
-
-    onLog(`Narrowing down the exact capture second...`);
+    onLog(`Starting binary search for the exact second...`);
     let steps = 0;
-    const maxEstimatedSteps = 22;
+    const maxSteps = 28;
 
-    while (maxTimestamp - minTimestamp > 2) {
+    while (maxTimestamp - minTimestamp > 1) {
         steps++;
-        const midTimestamp = Math.round((maxTimestamp + minTimestamp) / 2);
-        const percent = Math.min(92, 15 + Math.round((steps / maxEstimatedSteps) * 75));
+        let midTimestamp = Math.floor((minTimestamp + maxTimestamp) / 2);
+        searchReq.value.queryOptions.filter.photoAge.minTimestamp = minTimestamp;
+        searchReq.value.queryOptions.filter.photoAge.maxTimestamp = midTimestamp;
 
-        onProgress({
-            percent,
-            stepText: `Searching time window (Step ${steps} of ~22)...`
+        const progressPercent = Math.min(20 + Math.round((steps / 22) * 75), 95);
+        onProgress({ 
+            percent: progressPercent, 
+            stepText: `Splitting time window (step ${steps})...` 
         });
 
-        pingReq.value = {
-            ...baseRequestContents,
-            queryOptions: {
-                ...baseRequestContents.queryOptions,
-                filterOptions: {
-                    photoAge: { startSeconds: minTimestamp, endSeconds: midTimestamp }
-                }
-            }
-        };
-
-        const pingRes = await fetch(ENDPOINT, {
-            method: "POST", headers: HEADERS, body: JSON.stringify(pingReq.toArray())
+        const res = await fetch(ENDPOINT, {
+            method: "POST", headers: HEADERS, body: JSON.stringify(searchReq.toArray())
         }).then(r => r.json());
 
-        const pingResponse = silencePbfishWarnings(() => {
-            const resp = pbfish.create("SingleImageSearchResponse");
-            resp.fromArray(pingRes);
-            return resp;
+        const resp = silencePbfishWarnings(() => {
+            const p = pbfish.create("SingleImageSearchResponse");
+            p.fromArray(res);
+            return p;
         });
 
-        const hasImage = pingResponse.status.code === "OK";
-
-        if (hasImage) {
+        if (resp.status.code === "OK") {
             maxTimestamp = midTimestamp;
-            onLog(`Step ${steps}: Photo taken in first half`);
         } else {
             minTimestamp = midTimestamp;
-            onLog(`Step ${steps}: Photo taken in second half`);
+        }
+
+        if (steps >= maxSteps) {
+            onLog(`Ceiling limit reached at step ${steps}.`);
+            break;
         }
     }
 
@@ -249,13 +322,9 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
     const exactDate = new Date(exactUnix * 1000);
     const cameraGen = estimateCameraGeneration(baseDate.year);
 
-    // Fallback if exact timestamp ceiling was hit
-    if (exactUnix >= ceilingLimit - 10) {
-        onLog(`Exact second unavailable. Returning confirmed month.`);
-        const fallbackMonth = MONTH_NAMES[baseDate.month - 1];
-
-        onProgress({ percent: 100, stepText: "Done (Month-level precision)" });
-
+    // Fallback if binary search didn't narrow down (e.g. pre-2015 imagery)
+    if (maxTimestamp - minTimestamp > 60) {
+        onLog(`Binary search could not resolve to the exact second.`);
         return {
             success: true,
             isExact: false,
@@ -279,6 +348,26 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
     } catch (e) {
         onLog(`Timezone fallback to UTC`);
     }
+
+    let tzShort = '';
+    let tzOffsetStr = '';
+    try {
+        const parts = new Intl.DateTimeFormat('en-US', {
+            timeZone: timezone,
+            timeZoneName: 'shortOffset'
+        }).formatToParts(exactDate);
+        const offsetPart = parts.find(p => p.type === 'timeZoneName');
+        if (offsetPart) tzOffsetStr = offsetPart.value;
+    } catch (e) {}
+
+    try {
+        const parts = new Intl.DateTimeFormat('en-US', {
+            timeZone: timezone,
+            timeZoneName: 'short'
+        }).formatToParts(exactDate);
+        const tzPart = parts.find(p => p.type === 'timeZoneName');
+        if (tzPart) tzShort = tzPart.value;
+    } catch (e) {}
 
     const localTimeFormat = {
         year: 'numeric', month: 'long', day: 'numeric',
@@ -306,6 +395,8 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
         localPanoTime,
         yourLocalTime,
         timezone,
+        tzShort,
+        tzOffsetStr,
         lat,
         lng,
         panoId,

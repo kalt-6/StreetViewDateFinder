@@ -108,12 +108,17 @@ export async function unshortenMobileUrl(shortUrl, onLog = () => {}) {
             const data = await res.json();
             if (data.success && data.resolved_url) {
                 const unwrapped = unwrapConsentRedirect(data.resolved_url);
+                const isBlankPin = unwrapped.includes('ftid=0x0:0x0') && !containsUsableLocationData(unwrapped);
+
                 if (containsUsableLocationData(unwrapped)) {
                     onLog(`Expanded via resolver`);
                     return unwrapped;
+                } else if (isBlankPin) {
+                    onLog(`Blank dropped pin link (ftid=0x0:0x0 points to 0,0)`);
+                    return { isBlankPin: true, unwrappedUrl: unwrapped };
                 } else {
                     onLog(`Dropped pin requires browser opening to resolve coordinates`);
-                    return null;
+                    return { isBlankPin: false, unwrappedUrl: unwrapped };
                 }
             }
         }
@@ -160,6 +165,13 @@ export function parseInput(rawInput) {
         const lat = parseFloat(coordMatch[1]);
         const lng = parseFloat(coordMatch[2]);
         if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+            // Reject literal 0, 0
+            if (Math.abs(lat) < 0.0001 && Math.abs(lng) < 0.0001) {
+                return {
+                    type: 'INVALID',
+                    error: 'The location resolved to 0° latitude, 0° longitude in the ocean. Please make sure to share from inside Street View on your phone.'
+                };
+            }
             return { type: 'COORDINATES', lat, lng };
         }
     }
@@ -199,6 +211,8 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
 
     const isShortMobile = isMobileShortLink(targetInput);
     let originalMobileUrl = targetInput;
+    let isBlankPin = false;
+
     if (isShortMobile) {
         if (!originalMobileUrl.startsWith('http://') && !originalMobileUrl.startsWith('https://')) {
             originalMobileUrl = 'https://' + originalMobileUrl;
@@ -208,12 +222,16 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
         onProgress({ percent: 5, stepText: "Expanding mobile link..." });
 
         const expanded = await unshortenMobileUrl(targetInput, onLog);
-        if (expanded) {
+        if (typeof expanded === 'string') {
             targetInput = expanded;
             onLog(`Successfully expanded mobile link`);
         } else {
-            const mobileErr = new Error(`Mobile short link requires browser opening`);
+            if (expanded && expanded.isBlankPin) {
+                isBlankPin = true;
+            }
+            const mobileErr = new Error(isBlankPin ? `Blank dropped pin detected (ftid=0x0:0x0)` : `Mobile short link requires browser opening`);
             mobileErr.isMobileLink = true;
+            mobileErr.isBlankPin = isBlankPin;
             mobileErr.originalUrl = originalMobileUrl;
             throw mobileErr;
         }
@@ -222,8 +240,9 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
     const parsed = parseInput(targetInput);
     if (!parsed || parsed.type === 'INVALID' || parsed.error) {
         if (isShortMobile) {
-            const mobileErr = new Error(`Mobile short link requires browser opening`);
+            const mobileErr = new Error(isBlankPin ? `Blank dropped pin detected (ftid=0x0:0x0)` : `Mobile short link requires browser opening`);
             mobileErr.isMobileLink = true;
+            mobileErr.isBlankPin = isBlankPin;
             mobileErr.originalUrl = originalMobileUrl;
             throw mobileErr;
         }
@@ -275,7 +294,7 @@ export async function extractTimestamp(input, onProgress = () => {}, onLog = () 
         });
 
         if (coordResp.status.code !== "OK" || !coordResp.metadata) {
-            throw new Error(`Couldn't find any official Street View imagery near ${parsed.lat}, ${parsed.lng}. Try moving closer to a mapped road.`);
+            throw new Error(`Couldn't find any official Street View imagery near ${parsed.lat.toFixed(6)}, ${parsed.lng.toFixed(6)}. Try moving closer to a mapped road.`);
         }
 
         panoId = coordResp.metadata.pano.id;

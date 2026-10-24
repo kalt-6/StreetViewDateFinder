@@ -301,6 +301,35 @@ async function runExtraction() {
 
         if (err.isMobileLink) {
             const cleanUrl = escapeHtml(err.originalUrl);
+
+            if (err.isBlankPin) {
+                resultDiv.innerHTML = `
+                    <div class="result-card mobile-link-card" style="border-left-color: #f59e0b;">
+                        <div class="mobile-helper-header">
+                            <span class="mobile-helper-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">Blank Dropped Pin Detected</span>
+                            <h3 class="mobile-helper-title">This shared pin has no coordinates</h3>
+                        </div>
+                        <p class="mobile-helper-desc">
+                            When sharing a generic "Dropped pin" from the Google Maps mobile app, Google often generates a blank link (<code>ftid=0x0:0x0</code>) that points to 0° latitude, 0° longitude in the ocean.
+                        </p>
+                        <div class="mobile-instructions">
+                            <div class="mobile-step">
+                                <span class="step-num">1</span>
+                                <span>In the Google Maps app on your phone, <strong>tap into Street View</strong> (tap the circular 360 photo thumbnail so you see the road).</span>
+                            </div>
+                            <div class="mobile-step">
+                                <span class="step-num">2</span>
+                                <span>Tap the <strong>three dots (•••)</strong> in the top-right corner of the Street View screen.</span>
+                            </div>
+                            <div class="mobile-step">
+                                <span class="step-num">3</span>
+                                <span>Tap <strong>Share</strong> &gt; <strong>Copy link</strong> and paste that link here!</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
             resultDiv.innerHTML = `
                 <div class="result-card mobile-link-card">
                     <div class="mobile-helper-header">

@@ -35,6 +35,12 @@
     --accent-rose-dim: rgba(244, 63, 94, 0.12);
     --accent-rose-border: rgba(244, 63, 94, 0.35);
 
+    /* Ko-fi Brand Accents */
+    --brand-kofi: #ff5e5b;
+    --brand-kofi-hover: #ff726f;
+    --brand-kofi-dim: rgba(255, 94, 91, 0.14);
+    --brand-kofi-border: rgba(255, 94, 91, 0.4);
+
     /* Text */
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
@@ -194,6 +200,103 @@ main {
     padding: 6px 10px;
     border-radius: var(--radius-sm);
     cursor: pointer;
+}
+
+/* --- Header Actions & Ko-fi Donation Button --- */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-kofi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    background: var(--brand-kofi);
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 0.84rem;
+    padding: 0.42rem 0.95rem;
+    border-radius: 999px;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(255, 94, 91, 0.28);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.btn-kofi:hover {
+    background: var(--brand-kofi-hover);
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(255, 94, 91, 0.42);
+}
+
+.btn-kofi:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(255, 94, 91, 0.25);
+}
+
+.btn-kofi .kofi-icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    display: block;
+}
+
+/* Result Card Ko-fi Button */
+.btn-kofi-action {
+    background: var(--brand-kofi-dim) !important;
+    border-color: var(--brand-kofi-border) !important;
+    color: #ff8582 !important;
+}
+
+.btn-kofi-action:hover {
+    background: var(--brand-kofi) !important;
+    border-color: var(--brand-kofi) !important;
+    color: #ffffff !important;
+}
+
+.btn-kofi-action .kofi-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: -2px;
+    margin-right: 4px;
+}
+
+/* About Section Support Callout */
+.about-support-card {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.about-support-info {
+    flex: 1 1 300px;
+}
+
+.about-support-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.98rem;
+    margin-bottom: 0.2rem;
+}
+
+.about-support-desc {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    margin: 0;
+    line-height: 1.5;
 }
 
 /* --- Hero & Tool Section --- */
@@ -1384,6 +1487,28 @@ main {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
+
+    .site-nav {
+        display: none;
+    }
+
+    .mobile-nav-toggle {
+        display: block;
+    }
+
+    .site-nav.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--bg-card);
+        border-bottom: 1px solid var(--border-subtle);
+        padding: 1rem 1.5rem;
+        gap: 0.75rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
 }
 
 @media (max-width: 680px) {
@@ -1405,28 +1530,29 @@ main {
         padding: 14px;
     }
 
-    .site-nav {
+    .hero-timestamp {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn-kofi {
+        padding: 0.38rem 0.75rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .brand-title {
+        font-size: 0.95rem;
+    }
+
+    .btn-kofi span {
         display: none;
     }
 
-    .mobile-nav-toggle {
-        display: block;
-    }
-
-    .site-nav.open {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: var(--bg-card);
-        border-bottom: 1px solid var(--border-subtle);
-        padding: 1rem 1.5rem;
-        gap: 0.75rem;
-    }
-
-    .hero-timestamp {
-        font-size: 1.3rem;
+    .btn-kofi {
+        padding: 0.42rem 0.55rem;
+        border-radius: var(--radius-sm);
     }
 }
